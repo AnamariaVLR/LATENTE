@@ -91,11 +91,18 @@ const webp = image?.replace(/\.jpe?g$/i, '.webp');
     background: var(--forest-deep);
   }
 
-  /* Full-bleed image sections fill the viewport and centre their content. */
-  .section--full {
-    min-height: 100svh;
+  /* Image sections centre their content vertically. Full panels fill the
+     viewport; non-full image sections still get a deliberate height so the
+     photography has presence and reads as an intentional band, not a thin strip. */
+  .section--image {
     display: grid;
     align-items: center;
+  }
+  .section--image:not(.section--full) {
+    min-height: 66svh;
+  }
+  .section--full {
+    min-height: 100svh;
   }
 
   .section__bg {

@@ -12,7 +12,11 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^5.7.0",
-    "@astrojs/sitemap": "^3.3.0"
+    "@astrojs/sitemap": "^3.3.0",
+    "astro": "^5.7.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "playwright-core": "^1.60.0"
   }
 }

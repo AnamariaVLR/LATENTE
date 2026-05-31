@@ -52,7 +52,10 @@
   --space-lg: 2.5rem;
   --space-xl: 4rem;
   --space-2xl: 6rem;
-  --space-3xl: clamp(5rem, 4rem + 8vw, 11rem);  /* tall vertical section padding */
+  /* Tall, breathing section padding — generous but not cavernous. Resolves to
+     ~53px (mobile) → ~98px (desktop) per side, so short sections no longer read
+     as mostly-empty voids. */
+  --space-3xl: clamp(3.5rem, 2.5rem + 4vw, 7.5rem);
 
   /* Measure (line length) and content widths */
   --measure: 36rem;        /* short reading column */
@@ -70,4 +73,13 @@
   --hairline: color-mix(in srgb, var(--gold) 70%, transparent);
   --scrim-strong: 0.62; /* overlay opacity where text sits over imagery */
   --scrim-soft: 0.40;
+}
+
+/* On small phones the wide wordmark tracking (0.42em) makes "LATENTE" wider than
+   the viewport, clipping its edges. Tighten the tracking below 30rem so the
+   wordmark always fits; the spacious desktop tracking is preserved above it. */
+@media (max-width: 30rem) {
+  :root {
+    --track-wordmark: 0.22em;
+  }
 }

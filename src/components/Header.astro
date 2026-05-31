@@ -77,9 +77,20 @@ const onInquire = path === 'inquire';
     color: var(--on-dark);
   }
 
+  /* Mobile: the wordmark + Inquire + language switcher don't all fit on one row
+     on narrow phones. Tighten the spacing, and below 22.5rem drop the header
+     Inquire link (the hero and in-page CTAs still carry it) so nothing collides. */
   @media (max-width: 30rem) {
+    .header__inner {
+      gap: var(--space-sm);
+    }
     .header__end {
       gap: var(--space-md);
+    }
+  }
+  @media (max-width: 22.5rem) {
+    .header__inquire {
+      display: none;
     }
   }
 </style>

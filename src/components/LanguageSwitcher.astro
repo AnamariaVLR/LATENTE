@@ -47,6 +47,13 @@ const codes: Record<Locale, string> = { en: 'EN', es: 'ES', ar: 'AR' };
     font-size: var(--step--1);
     letter-spacing: 0.18em;
   }
+  /* Compact the switcher on narrow phones so the header row fits. */
+  @media (max-width: 30rem) {
+    .lang {
+      gap: 0.4em;
+      letter-spacing: 0.1em;
+    }
+  }
   .lang__link {
     text-decoration: none;
     opacity: 0.6;
