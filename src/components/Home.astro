@@ -189,6 +189,9 @@ const inquireHref = localizePath(locale, 'inquire');
   .movement__body {
     color: color-mix(in srgb, var(--on-dark) 80%, transparent);
     max-width: 28ch;
+    /* Auto margins center the capped block on the flex cross-axis; without this
+       a max-width flex item pins to the start and the text drifts left. */
+    margin-inline: auto;
     line-height: var(--leading-body);
   }
 
@@ -214,6 +217,8 @@ const inquireHref = localizePath(locale, 'inquire');
   }
   .edition__line {
     max-width: 42ch;
+    /* Center the capped block on the flex cross-axis (see .movement__body). */
+    margin-inline: auto;
     line-height: var(--leading-body);
     color: color-mix(in srgb, var(--on-dark) 92%, transparent);
   }
