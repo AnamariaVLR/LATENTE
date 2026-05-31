@@ -32,10 +32,6 @@ const es: Dictionary = {
     scroll: 'Descender',
   },
 
-  opening: {
-    body: 'Café de Especialidad Colombiano, entendido como cultura, identidad y ritual.',
-  },
-
   program: {
     eyebrow: 'El Programa de Café de Autor',
     title: 'Tres movimientos',
@@ -106,7 +102,7 @@ const es: Dictionary = {
   },
 
   hospitality: {
-    body: 'Concebido para habitar espacios refinados. Cada edición se adapta a la atmósfera y la identidad de su entorno.',
+    body: 'Cultura . Identidad . Ritual',
     alt: 'Un interior de hospitalidad refinado bajo una luz cálida y tenue.',
   },
 

@@ -47,8 +47,6 @@ export interface Dictionary {
     scroll: string;
   };
 
-  opening: { body: string };
-
   program: {
     eyebrow: string;
     title: string;

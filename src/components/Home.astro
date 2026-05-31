@@ -15,21 +15,7 @@ const t = getDictionary(locale);
 const inquireHref = localizePath(locale, 'inquire');
 ---
 
-{/* 2 — Opening statement over imagery */}
-<Section
-  id="opening"
-  variant="image"
-  image="/images/hospitality-interior.jpg"
-  scrim="strong"
-  grain={true}
-  label={t.opening.body.slice(0, 32)}
->
-  <ScrollReveal class="measure-wide center">
-    <p class="statement statement--on-dark">{t.opening.body}</p>
-  </ScrollReveal>
-</Section>
-
-{/* 4 — The Signature Coffee Program: three numbered movements */}
+{/* The Signature Coffee Program: three numbered movements */}
 <Section variant="dark" label={t.program.eyebrow}>
   <ScrollReveal class="center block-head">
     <p class="eyebrow">{t.program.eyebrow}</p>

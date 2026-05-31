@@ -28,10 +28,6 @@ const en: Dictionary = {
     scroll: 'Scroll',
   },
 
-  opening: {
-    body: 'Colombian Specialty Coffee, approached as culture, identity, and ritual.',
-  },
-
   program: {
     eyebrow: 'The Signature Coffee Program',
     title: 'Three movements',
@@ -102,7 +98,7 @@ const en: Dictionary = {
   },
 
   hospitality: {
-    body: 'Designed to inhabit refined spaces. Each edition is adapted to the atmosphere and identity of its environment.',
+    body: 'Culture . Identity . Ritual',
     alt: 'A refined hospitality interior in warm, muted light.',
   },
 
