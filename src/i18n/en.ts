@@ -71,7 +71,7 @@ const en: Dictionary = {
           'Notes of white florals, stone fruit, and luminous acidity.',
           'Designed for spaces that privilege light, silence, and presence.',
         ],
-        image: '/images/coffee-01-high-bloom.jpg',
+        image: '/images/essence-coffee-blossom.jpg',
         alt: 'Coffee blossoms in soft light on a high-altitude farm.',
       },
       {

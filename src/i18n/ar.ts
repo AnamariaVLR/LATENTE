@@ -81,7 +81,7 @@ const ar: Dictionary = {
           'بنفحات من الأزهار البيضاء والفاكهة ذات النواة وحموضة مشرقة.',
           'مصمّمة للمساحات التي تُعلي من شأن الضوء والصمت والحضور.',
         ],
-        image: '/images/coffee-01-high-bloom.jpg',
+        image: '/images/essence-coffee-blossom.jpg',
         alt: 'أزهار القهوة في ضوء ناعم في مزرعة مرتفعة.',
       },
       {

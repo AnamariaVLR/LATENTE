@@ -75,7 +75,7 @@ const es: Dictionary = {
           'Notas de flores blancas, fruta de hueso y una acidez luminosa.',
           'Concebido para espacios que privilegian la luz, el silencio y la presencia.',
         ],
-        image: '/images/coffee-01-high-bloom.jpg',
+        image: '/images/essence-coffee-blossom.jpg',
         alt: 'Flores de café bajo una luz suave en una finca de gran altitud.',
       },
       {

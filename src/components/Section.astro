@@ -36,6 +36,9 @@ const {
 } = Astro.props;
 
 const scrimVar = scrim === 'strong' ? 'var(--scrim-strong)' : 'var(--scrim-soft)';
+
+// Serve a modern .webp with the .jpg as fallback. The image prop is the .jpg path.
+const webp = image?.replace(/\.jpe?g$/i, '.webp');
 ---
 
 <section
@@ -51,7 +54,10 @@ const scrimVar = scrim === 'strong' ? 'var(--scrim-strong)' : 'var(--scrim-soft)
   {
     variant === 'image' && image && (
       <div class="section__bg" aria-hidden="true">
-        <img src={image} alt="" loading="lazy" decoding="async" class="section__img" />
+        <picture>
+          {webp && <source srcset={webp} type="image/webp" />}
+          <img src={image} alt="" loading="lazy" decoding="async" class="section__img" />
+        </picture>
         <div class="section__scrim" style={`--s:${scrimVar}`}></div>
       </div>
     )
@@ -96,6 +102,11 @@ const scrimVar = scrim === 'strong' ? 'var(--scrim-strong)' : 'var(--scrim-soft)
     position: absolute;
     inset: 0;
     z-index: 1;
+  }
+  .section__bg picture {
+    display: block;
+    width: 100%;
+    height: 100%;
   }
   .section__img {
     width: 100%;

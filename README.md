@@ -99,28 +99,30 @@ Everything visual is centralised — swapping these re-skins the whole site.
 
 ---
 
-## Placeholder images to replace
+## Site imagery
 
-All images in `public/images/` are **labelled placeholders** and must be replaced
-with **licensed** high-resolution photography (do **not** use Canva or any
-unlicensed source). Keep the same filenames, or update the paths in the locale
-dictionaries (`editions[].image`) and components.
+Each image-backed section is served as a `<picture>` with a modern **`.webp`**
+source and a **`.jpg`** fallback. Provide both formats for every image, keeping the
+same base filename (the `.webp` path is derived automatically from the `.jpg`
+path). Section paths live in the locale dictionaries (`editions[].image`) and in
+`Hero.astro` / `Home.astro`.
 
-| File                              | Used in                | Recommended size | Treatment |
-|-----------------------------------|------------------------|------------------|-----------|
-| `hero-cocora-valley.jpg`          | Hero                   | 2400×1600        | Misty Cocora Valley wax palms; muted/desaturated |
-| `essence-coffee-blossom.jpg`      | Essence                | 2000×1333        | Coffee blossoms, soft light |
-| `coffee-01-high-bloom.jpg`        | No. 01 The High Bloom  | 2000×1333        | High-altitude blossom, light & airy |
-| `coffee-02-cacao-ground.jpg`      | No. 02 The Cacao Ground| 2000×1333        | Dark, cacao-toned foliage |
-| `coffee-03-ferment-light.jpg`     | No. 03 The Ferment Light| 2000×1333       | Ripe coffee cherries, warm |
-| `hospitality-interior.jpg`        | Hospitality            | 2400×1600        | Refined interior, warm muted light |
-| `og-image.jpg`                    | Social share card      | 1200×630         | Branded card (regenerate or replace) |
+| Base filename              | Used in                          | Recommended size | Treatment |
+|----------------------------|----------------------------------|------------------|-----------|
+| `hero-cocora-valley`       | Hero                             | 2400×1600        | Misty Cocora Valley wax palms; muted/desaturated |
+| `essence-coffee-blossom`   | Essence **and** No. 01 The High Bloom | 2000×1333   | Coffee blossoms, soft light |
+| `coffee-02-cacao-ground`   | No. 02 The Cacao Ground          | 2000×1333        | Dark, cacao-toned foliage |
+| `coffee-03-ferment-light`  | No. 03 The Ferment Light         | 2000×1333        | Ripe coffee cherries, warm |
+| `hospitality-interior`     | Hospitality                      | 2400×1600        | Refined interior, warm muted light |
+| `og-image.jpg`             | Social share card                | 1200×630         | Branded card (regenerate or replace) |
 
-Every image-backed text section already applies a gradient **scrim** so overlaid
-text stays above WCAG AA contrast. Favour muted, cinematic, desaturated imagery to
-match the brochure. Modern formats (AVIF/WebP) can be added alongside JPG — Astro's
-`<Image>`/`<Picture>` or a build step can generate them; the markup uses
-`loading="lazy"` and `decoding="async"` already.
+> The licensed photography is already in place. `essence-coffee-blossom` is reused
+> for both the Essence section and the No. 01 (The High Bloom) edition.
+
+Every image-backed text section applies a gradient **scrim** so overlaid text stays
+above WCAG AA contrast. To add a new image section, drop in `name.webp` + `name.jpg`
+and point the section at `name.jpg`. The markup already uses `loading="lazy"` and
+`decoding="async"` (the hero uses `fetchpriority="high"`).
 
 ---
 

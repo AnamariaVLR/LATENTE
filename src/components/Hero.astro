@@ -15,13 +15,16 @@ const inquireHref = localizePath(locale, 'inquire');
 
 <section class="hero grain" aria-label={t.hero.eyebrow}>
   <div class="hero__bg" aria-hidden="true">
-    <img
-      src="/images/hero-cocora-valley.jpg"
-      alt={t.meta.ogAlt}
-      fetchpriority="high"
-      decoding="async"
-      class="hero__img"
-    />
+    <picture>
+      <source srcset="/images/hero-cocora-valley.webp" type="image/webp" />
+      <img
+        src="/images/hero-cocora-valley.jpg"
+        alt={t.meta.ogAlt}
+        fetchpriority="high"
+        decoding="async"
+        class="hero__img"
+      />
+    </picture>
     <div class="hero__scrim"></div>
   </div>
 
@@ -53,6 +56,11 @@ const inquireHref = localizePath(locale, 'inquire');
     position: absolute;
     inset: 0;
     z-index: 1;
+  }
+  .hero__bg picture {
+    display: block;
+    width: 100%;
+    height: 100%;
   }
   .hero__img {
     width: 100%;
