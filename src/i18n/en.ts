@@ -29,12 +29,7 @@ const en: Dictionary = {
   },
 
   opening: {
-    body: 'We source, develop and place Colombian Specialty Coffee, approached as culture, identity, and ritual.',
-  },
-
-  essence: {
-    eyebrow: 'Essence',
-    body: 'Carefully cultivated and precisely roasted, LATENTE coffee reveals restrained energy and layered depth — designed for both quiet ritual and refined enjoyment.',
+    body: 'Colombian Specialty Coffee, approached as culture, identity, and ritual.',
   },
 
   program: {

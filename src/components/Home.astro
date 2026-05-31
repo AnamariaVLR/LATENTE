@@ -15,25 +15,17 @@ const t = getDictionary(locale);
 const inquireHref = localizePath(locale, 'inquire');
 ---
 
-{/* 2 — Opening statement */}
-<Section id="opening" variant="light" label={t.opening.body.slice(0, 32)}>
-  <ScrollReveal class="measure-wide center">
-    <p class="statement">{t.opening.body}</p>
-  </ScrollReveal>
-</Section>
-
-{/* 3 — Essence (atmospheric line over imagery) */}
+{/* 2 — Opening statement over imagery */}
 <Section
+  id="opening"
   variant="image"
-  image="/images/essence-coffee-blossom.jpg"
+  image="/images/hospitality-interior.jpg"
   scrim="strong"
   grain={true}
-  label={t.essence.eyebrow}
+  label={t.opening.body.slice(0, 32)}
 >
-  <ScrollReveal class="measure center">
-    <p class="eyebrow">{t.essence.eyebrow}</p>
-    <hr class="rule" />
-    <p class="statement statement--on-dark">{t.essence.body}</p>
+  <ScrollReveal class="measure-wide center">
+    <p class="statement statement--on-dark">{t.opening.body}</p>
   </ScrollReveal>
 </Section>
 

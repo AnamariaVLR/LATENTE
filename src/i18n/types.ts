@@ -49,8 +49,6 @@ export interface Dictionary {
 
   opening: { body: string };
 
-  essence: { eyebrow: string; body: string };
-
   program: {
     eyebrow: string;
     title: string;

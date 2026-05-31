@@ -33,12 +33,7 @@ const es: Dictionary = {
   },
 
   opening: {
-    body: 'Seleccionamos, desarrollamos y ubicamos Café de Especialidad Colombiano, entendido como cultura, identidad y ritual.',
-  },
-
-  essence: {
-    eyebrow: 'Esencia',
-    body: 'Cultivado con cuidado y tostado con precisión, el café LATENTE revela una energía contenida y una profundidad en capas — concebido tanto para el ritual sereno como para el disfrute refinado.',
+    body: 'Café de Especialidad Colombiano, entendido como cultura, identidad y ritual.',
   },
 
   program: {
