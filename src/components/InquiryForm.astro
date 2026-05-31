@@ -195,15 +195,31 @@ const FORM_NAME = 'inquiry';
     outline: none;
     border-block-end-color: var(--gold);
   }
+  /* Native select with a quiet custom chevron for affordance (mirrors in RTL). */
   select {
     appearance: none;
     cursor: pointer;
+    padding-inline-end: 1.6em;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%236e6a5f' stroke-width='1.4'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.1rem center;
+  }
+  :global(html[dir='rtl']) select {
+    background-position: left 0.1rem center;
+  }
+
+  /* Arabic script must not be letter-spaced or italicised (see global.css note). */
+  :global(html[dir='rtl']) .field label {
+    letter-spacing: normal;
+  }
+  :global(html[dir='rtl']) .field__opt {
+    font-style: normal;
   }
 
   /* Honeypot: removed from layout and the accessibility tree. */
   .hp {
     position: absolute;
-    left: -9999px;
+    inset-inline-start: -9999px;
     width: 1px;
     height: 1px;
     overflow: hidden;

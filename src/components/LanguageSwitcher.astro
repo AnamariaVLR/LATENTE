@@ -55,9 +55,12 @@ const codes: Record<Locale, string> = { en: 'EN', es: 'ES', ar: 'AR' };
   .lang__link:hover {
     opacity: 1;
   }
+  /* Active locale: full opacity + a hairline underline. Colour is left inherited
+     so the indicator never drops below AA (gold would, at this small size). */
   .lang__link[aria-current='true'] {
     opacity: 1;
-    color: var(--accent);
+    border-block-end: 1px solid var(--hairline);
+    padding-block-end: 0.25em;
   }
   .lang__sep {
     opacity: 0.4;

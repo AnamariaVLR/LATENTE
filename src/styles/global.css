@@ -132,13 +132,23 @@ p {
   inset-block-start: var(--space-sm);
 }
 
-/* --- Small display marks -------------------------------------------------- */
+/* --- Small display marks -------------------------------------------------- *
+ * Eyebrows are small text, so they must clear WCAG AA (4.5:1). Muted brass is a
+ * beautiful accent but only ~2.8:1 on ivory, so gold is reserved for the
+ * hairline rules and the large numerals (which pass at the 3:1 large-text bar).
+ * Eyebrow text uses a muted ink on light and ivory on dark instead.             */
 .eyebrow {
   font-family: var(--font-body);
   font-size: var(--step--1);
   letter-spacing: var(--track-eyebrow);
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--stone);
+}
+.section--dark .eyebrow,
+.section--image .eyebrow,
+.on-dark .eyebrow,
+.hero .eyebrow {
+  color: var(--on-dark);
 }
 
 /* Hairline gold divider — the only place gold appears as a field. */
@@ -174,14 +184,10 @@ p {
   border-block-end: 1px solid var(--hairline);
   transition: border-color 300ms ease, color 300ms ease, opacity 300ms ease;
 }
+/* On hover the text colour is kept (so it stays AA-legible in every context)
+   and the gold appears as the underline accent only. */
 .link:hover {
   border-block-end-color: var(--accent);
-  color: var(--accent);
-}
-.section--dark .link:hover,
-.on-dark .link:hover {
-  color: var(--on-dark);
-  border-block-end-color: var(--on-dark);
 }
 
 /* --- Film-grain overlay (optional, very low opacity) ---------------------- */
@@ -194,6 +200,19 @@ p {
   opacity: 0.05;
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* --- Right-to-left (Arabic) refinements ----------------------------------- *
+ * Wide letter-spacing and synthetic italics are typographic errors on Arabic:
+ * tracking breaks the script's mandatory letter-joining, and Arabic has no
+ * italic form. We neutralise both for the AR locale. The Latin wordmark keeps
+ * its tracking because Logo sets it explicitly via --track-wordmark.            */
+html[dir='rtl'] {
+  --track-display: normal;
+  --track-eyebrow: normal;
+}
+html[dir='rtl'] .statement {
+  letter-spacing: normal;
 }
 
 /* --- Scroll-reveal motion ------------------------------------------------- */
