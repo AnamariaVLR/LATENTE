@@ -1,0 +1,29 @@
+# Netlify configuration for LATENTE — static Astro deploy.
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Cache the self-hosted fonts aggressively — they are fingerprinted by name and
+# never change once a real brand font is in place.
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Long cache for images; replace the placeholder photography in /images before launch.
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+# Send visitors landing on the bare domain to the English homepage.
+# (A future enhancement could do Accept-Language negotiation via an edge function.)
+[[redirects]]
+  from = "/"
+  to = "/en/"
+  status = 302
+  force = false

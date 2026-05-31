@@ -1,0 +1,73 @@
+/* =============================================================================
+   LATENTE — Design tokens
+   Single source of truth for colour, type, spacing, motion. Swap values here to
+   re-skin the entire site. Derived from the brand brochure; treat as a strong
+   starting point. Real brand fonts/logo are dropped in via fonts.css + Logo.astro.
+   ============================================================================= */
+
+:root {
+  /* --- Colour ------------------------------------------------------------- */
+  --forest: #1e3a2c;   /* deep pine green — header, dark sections, primary brand */
+  --ivory:  #f4efe4;   /* warm cream — primary light background */
+  --ink:    #2c2a24;   /* warm near-black — body text on light */
+  --stone:  #6e6a5f;   /* muted secondary text */
+  --gold:   #a98b4e;   /* muted brass — accent, used VERY sparingly */
+  --on-dark: #f4efe4;  /* text on dark / image sections */
+
+  /* A deeper variant of forest for gradient scrims so they reach AA over imagery */
+  --forest-deep: #142318;
+
+  /* Semantic aliases ------------------------------------------------------- */
+  --bg: var(--ivory);
+  --fg: var(--ink);
+  --fg-muted: var(--stone);
+  --accent: var(--gold);
+
+  /* --- Typography --------------------------------------------------------- */
+  --font-display: 'Cormorant Garamond', 'Amiri', Georgia, 'Times New Roman', serif;
+  --font-body: 'EB Garamond', 'Amiri', Georgia, 'Times New Roman', serif;
+
+  /* Fluid type scale (clamp: min, preferred, max) — large and confident. */
+  --step--1: clamp(0.95rem, 0.90rem + 0.25vw, 1.05rem);
+  --step-0:  clamp(1.05rem, 1.00rem + 0.30vw, 1.20rem);  /* body */
+  --step-1:  clamp(1.35rem, 1.15rem + 0.90vw, 1.85rem);
+  --step-2:  clamp(1.70rem, 1.30rem + 1.80vw, 2.75rem);
+  --step-3:  clamp(2.10rem, 1.50rem + 3.00vw, 4.00rem);
+  --step-4:  clamp(2.60rem, 1.60rem + 5.00vw, 6.00rem);  /* hero wordmark */
+
+  --leading-body: 1.7;
+  --leading-tight: 1.15;
+
+  /* Tracking — wide letter-spacing belongs ONLY to wordmark / short display. */
+  --track-wordmark: 0.42em;
+  --track-display: 0.16em;
+  --track-eyebrow: 0.30em;
+  --track-body: normal;
+
+  /* --- Spacing ------------------------------------------------------------ */
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+  --space-xl: 4rem;
+  --space-2xl: 6rem;
+  --space-3xl: clamp(5rem, 4rem + 8vw, 11rem);  /* tall vertical section padding */
+
+  /* Measure (line length) and content widths */
+  --measure: 36rem;        /* short reading column */
+  --measure-wide: 52rem;
+  --container: 76rem;
+  --gutter: clamp(1.25rem, 5vw, 4rem);
+
+  /* --- Motion ------------------------------------------------------------- */
+  --reveal-duration: 700ms;
+  --reveal-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --reveal-shift: 18px;
+
+  /* --- Misc --------------------------------------------------------------- */
+  --rule: 1px;
+  --hairline: color-mix(in srgb, var(--gold) 70%, transparent);
+  --scrim-strong: 0.62; /* overlay opacity where text sits over imagery */
+  --scrim-soft: 0.40;
+}

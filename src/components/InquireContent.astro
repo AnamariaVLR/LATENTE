@@ -1,0 +1,42 @@
+---
+// The /inquire page body: a calm header followed by the Netlify form.
+import Section from './Section.astro';
+import ScrollReveal from './ScrollReveal.astro';
+import InquiryForm from './InquiryForm.astro';
+import { getDictionary, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+---
+
+<Section variant="light" label={t.inquire.title} class="inquire-section">
+  <ScrollReveal class="measure center inquire-head">
+    <p class="eyebrow">{t.inquire.eyebrow}</p>
+    <h1 class="inquire-title">{t.inquire.title}</h1>
+    <hr class="rule" />
+    <p class="inquire-intro">{t.inquire.intro}</p>
+  </ScrollReveal>
+
+  <ScrollReveal class="inquire-form-wrap">
+    <InquiryForm locale={locale} />
+  </ScrollReveal>
+</Section>
+
+<style>
+  .inquire-head {
+    margin-block-end: var(--space-2xl);
+  }
+  .inquire-title {
+    font-size: var(--step-3);
+    margin-block-start: var(--space-sm);
+  }
+  .inquire-intro {
+    margin-block-start: var(--space-md);
+    line-height: var(--leading-body);
+    color: var(--stone);
+  }
+</style>

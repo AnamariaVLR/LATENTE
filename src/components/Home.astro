@@ -1,0 +1,252 @@
+---
+// The long-scroll homepage: sections 2–9 (the hero is rendered separately).
+// Composed from <Section> and <ScrollReveal>; all copy comes from the locale
+// dictionary so there are no hard-coded strings here.
+import Section from './Section.astro';
+import ScrollReveal from './ScrollReveal.astro';
+import { getDictionary, localizePath, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+const inquireHref = localizePath(locale, 'inquire');
+---
+
+{/* 2 — Opening statement */}
+<Section id="opening" variant="light" label={t.opening.body.slice(0, 32)}>
+  <ScrollReveal class="measure-wide center">
+    <p class="statement">{t.opening.body}</p>
+  </ScrollReveal>
+</Section>
+
+{/* 3 — Essence (atmospheric line over imagery) */}
+<Section
+  variant="image"
+  image="/images/essence-coffee-blossom.jpg"
+  scrim="strong"
+  grain={true}
+  label={t.essence.eyebrow}
+>
+  <ScrollReveal class="measure center">
+    <p class="eyebrow">{t.essence.eyebrow}</p>
+    <hr class="rule" />
+    <p class="statement statement--on-dark">{t.essence.body}</p>
+  </ScrollReveal>
+</Section>
+
+{/* 4 — The Signature Coffee Program: three numbered movements */}
+<Section variant="dark" label={t.program.eyebrow}>
+  <ScrollReveal class="center block-head">
+    <p class="eyebrow">{t.program.eyebrow}</p>
+    <hr class="rule" />
+  </ScrollReveal>
+
+  <ol class="movements">
+    {
+      t.program.movements.map((m, i) => (
+        <ScrollReveal as="li" delay={i} class="movement">
+          <span class="movement__numeral" aria-hidden="true">{m.numeral}</span>
+          <h2 class="movement__title">{m.title}</h2>
+          <p class="movement__body">{m.body}</p>
+        </ScrollReveal>
+      ))
+    }
+  </ol>
+</Section>
+
+{/* 5 — The House Coffees: three full-bleed editions, each its own panel */}
+<Section variant="light" label={t.houseCoffees.eyebrow} class="editions-intro">
+  <ScrollReveal class="center">
+    <p class="eyebrow">{t.houseCoffees.eyebrow}</p>
+    <hr class="rule" />
+  </ScrollReveal>
+</Section>
+
+{
+  t.houseCoffees.editions.map((ed) => (
+    <Section
+      variant="image"
+      image={ed.image}
+      scrim="strong"
+      full={true}
+      grain={true}
+      label={`${ed.no} — ${ed.name}`}
+    >
+      <ScrollReveal class="measure center edition">
+        <p class="edition__no">{ed.no}</p>
+        <h2 class="edition__name">{ed.name}</h2>
+        <hr class="rule" />
+        {ed.lines.map((line) => (
+          <p class="edition__line">{line}</p>
+        ))}
+      </ScrollReveal>
+    </Section>
+  ))
+}
+
+{/* 6 — Bespoke Experience (non-interactive) */}
+<Section variant="light" label={t.bespoke.eyebrow}>
+  <ScrollReveal class="measure center">
+    <p class="eyebrow">{t.bespoke.eyebrow}</p>
+    <h2 class="block-title">{t.bespoke.title}</h2>
+    <hr class="rule" />
+    <p class="prose">{t.bespoke.body}</p>
+    <a href={inquireHref} class="link spaced-link">{t.bespoke.link}</a>
+  </ScrollReveal>
+</Section>
+
+{/* 7 — Hospitality Applications */}
+<Section
+  variant="image"
+  image="/images/hospitality-interior.jpg"
+  scrim="strong"
+  full={true}
+  label={t.hospitality.body.slice(0, 32)}
+>
+  <ScrollReveal class="measure center">
+    <p class="statement statement--on-dark">{t.hospitality.body}</p>
+  </ScrollReveal>
+</Section>
+
+{/* 8 — Partnership Philosophy */}
+<Section variant="light" label={t.philosophy.eyebrow}>
+  <ScrollReveal class="measure center">
+    <p class="eyebrow">{t.philosophy.eyebrow}</p>
+    <hr class="rule" />
+    <p class="statement">{t.philosophy.body}</p>
+  </ScrollReveal>
+</Section>
+
+{/* 9 — Inquiry call */}
+<Section variant="dark" label={t.inquiryCall.cta}>
+  <ScrollReveal class="measure center">
+    <p class="prose prose--muted-dark">{t.inquiryCall.line}</p>
+    <a href={inquireHref} class="cta">{t.inquiryCall.cta}</a>
+  </ScrollReveal>
+</Section>
+
+<style>
+  /* Large, quiet statement type — the dominant voice of the page. */
+  .statement {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: var(--step-2);
+    line-height: 1.32;
+    letter-spacing: 0.01em;
+  }
+  .statement--on-dark {
+    color: var(--on-dark);
+  }
+
+  .block-head {
+    margin-block-end: var(--space-2xl);
+  }
+  .block-title {
+    font-size: var(--step-2);
+    margin-block-start: var(--space-sm);
+  }
+
+  /* Body prose at normal tracking and generous leading. */
+  .prose {
+    font-size: var(--step-0);
+    line-height: var(--leading-body);
+    margin-block-start: var(--space-md);
+  }
+  .prose--muted-dark {
+    color: color-mix(in srgb, var(--on-dark) 78%, transparent);
+  }
+
+  .spaced-link {
+    margin-block-start: var(--space-lg);
+  }
+
+  /* --- Program movements --- */
+  .movements {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-2xl) var(--space-xl);
+  }
+  .movement {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+  .movement__numeral {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    color: var(--accent);
+    letter-spacing: var(--track-display);
+  }
+  .movement__title {
+    font-size: var(--step-1);
+    font-weight: 500;
+  }
+  .movement__body {
+    color: color-mix(in srgb, var(--on-dark) 80%, transparent);
+    max-width: 28ch;
+    line-height: var(--leading-body);
+  }
+
+  /* --- Editions --- */
+  .edition {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-sm);
+  }
+  .edition__no {
+    font-size: var(--step--1);
+    letter-spacing: var(--track-eyebrow);
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .edition__name {
+    font-size: var(--step-3);
+    font-weight: 500;
+  }
+  .edition__line {
+    max-width: 42ch;
+    line-height: var(--leading-body);
+    color: color-mix(in srgb, var(--on-dark) 92%, transparent);
+  }
+  .edition__line + .edition__line {
+    margin-block-start: var(--space-2xs);
+  }
+
+  /* The intro band above the editions sits tighter than a full section. */
+  .editions-intro {
+    padding-block: var(--space-2xl);
+  }
+
+  /* --- Primary call-to-action button --- */
+  .cta {
+    display: inline-block;
+    margin-block-start: var(--space-lg);
+    padding: var(--space-sm) var(--space-xl);
+    font-family: var(--font-body);
+    font-size: var(--step--1);
+    letter-spacing: var(--track-eyebrow);
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--on-dark);
+    border: 1px solid var(--hairline);
+    transition: background-color 320ms ease, color 320ms ease, border-color 320ms ease;
+  }
+  .cta:hover {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--forest-deep);
+  }
+
+  @media (max-width: 48rem) {
+    .movements {
+      grid-template-columns: 1fr;
+      gap: var(--space-xl);
+    }
+  }
+</style>

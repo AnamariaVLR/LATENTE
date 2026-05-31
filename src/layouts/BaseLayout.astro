@@ -1,0 +1,115 @@
+---
+import SEO from '../components/SEO.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { getDictionary, type Locale } from '../i18n';
+
+import '../styles/tokens.css';
+import '../styles/fonts.css';
+import '../styles/global.css';
+
+interface Props {
+  locale: Locale;
+  /** Sub-path within the locale (e.g. '' for home, 'inquire'). */
+  path?: string;
+  title: string;
+  description: string;
+  ogAlt: string;
+  /** Header treatment: transparent over a hero, or a solid band. */
+  headerTone?: 'over' | 'solid';
+}
+
+const {
+  locale,
+  path = '',
+  title,
+  description,
+  ogAlt,
+  headerTone = 'over',
+} = Astro.props;
+
+const t = getDictionary(locale);
+const isArabic = locale === 'ar';
+---
+
+<!doctype html>
+<html lang={t.htmlLang} dir={t.dir}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#1e3a2c" />
+    <meta name="generator" content={Astro.generator} />
+
+    {/* Favicon set generated from the palm-tree mark (placeholder). */}
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    {/* Preload the fonts most likely to paint first to avoid layout shift. */}
+    <link
+      rel="preload"
+      href="/fonts/cormorant-garamond-500-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/eb-garamond-400-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    {
+      isArabic && (
+        <link
+          rel="preload"
+          href="/fonts/amiri-400-arabic.woff2"
+          as="font"
+          type="font/woff2"
+          crossorigin
+        />
+      )
+    }
+
+    <SEO locale={locale} path={path} title={title} description={description} ogAlt={ogAlt} />
+  </head>
+
+  <body>
+    <a href="#main" class="skip-link">{t.nav.skip}</a>
+
+    <Header locale={locale} path={path} tone={headerTone} />
+
+    <main id="main">
+      <slot />
+    </main>
+
+    <Footer locale={locale} path={path} />
+
+    {/* Scroll-reveal: register one observer for all [data-reveal] elements.
+        Reduced-motion users get the content immediately (see global.css) — but we
+        also short-circuit here so nothing depends on the observer firing. */}
+    <script>
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const items = document.querySelectorAll('[data-reveal]');
+
+      if (prefersReduced || !('IntersectionObserver' in window)) {
+        items.forEach((el) => el.classList.add('is-visible'));
+      } else {
+        const io = new IntersectionObserver(
+          (entries, obs) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                obs.unobserve(entry.target);
+              }
+            });
+          },
+          { rootMargin: '0px 0px -10% 0px', threshold: 0.12 },
+        );
+        items.forEach((el) => io.observe(el));
+      }
+    </script>
+  </body>
+</html>

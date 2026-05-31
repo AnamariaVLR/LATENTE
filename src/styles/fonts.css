@@ -1,0 +1,69 @@
+/* =============================================================================
+   Self-hosted fonts. No hotlinking to Google Fonts (avoids layout shift and a
+   third-party request). To swap in the real brand font, replace the files in
+   /public/fonts and update the @font-face src below — nothing else changes.
+
+   Subsets downloaded: Cormorant Garamond (400/500/600, latin),
+   EB Garamond (400/500, latin), Amiri (400/700, latin + arabic for the AR locale).
+   ============================================================================= */
+
+/* --- Cormorant Garamond — display / wordmark / section titles ------------- */
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/cormorant-garamond-400-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/cormorant-garamond-500-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/cormorant-garamond-600-latin.woff2') format('woff2');
+}
+
+/* --- EB Garamond — body --------------------------------------------------- */
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/eb-garamond-400-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'EB Garamond';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/eb-garamond-500-latin.woff2') format('woff2');
+}
+
+/* --- Amiri — Arabic (and latin fallback) for the AR locale ---------------- */
+@font-face {
+  font-family: 'Amiri';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/amiri-400-arabic.woff2') format('woff2'),
+       url('/fonts/amiri-400-latin.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF,
+                 U+0000-00FF, U+0131, U+0152-0153, U+2000-206F, U+2074, U+20AC;
+}
+@font-face {
+  font-family: 'Amiri';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/amiri-700-arabic.woff2') format('woff2'),
+       url('/fonts/amiri-700-latin.woff2') format('woff2');
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF,
+                 U+0000-00FF, U+0131, U+0152-0153, U+2000-206F, U+2074, U+20AC;
+}

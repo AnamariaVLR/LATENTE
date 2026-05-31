@@ -1,0 +1,21 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import Home from '../../components/Home.astro';
+import { getDictionary } from '../../i18n';
+
+const locale = 'en' as const;
+const t = getDictionary(locale);
+---
+
+<BaseLayout
+  locale={locale}
+  path=""
+  title={t.meta.title}
+  description={t.meta.description}
+  ogAlt={t.meta.ogAlt}
+  headerTone="over"
+>
+  <Hero locale={locale} />
+  <Home locale={locale} />
+</BaseLayout>

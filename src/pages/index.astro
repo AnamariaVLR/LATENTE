@@ -1,0 +1,5 @@
+---
+// Bare domain → default locale. Netlify also enforces this via netlify.toml;
+// this page covers local dev/preview and any direct hit on index.html.
+return Astro.redirect('/en/', 302);
+---

@@ -1,0 +1,179 @@
+---
+// Hero: full-bleed misty wax-palm landscape, centred wordmark, the program line,
+// and a single quiet "Inquire" link. Slow fade-in on load (reduced-motion safe).
+import Logo from './Logo.astro';
+import { getDictionary, localizePath, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+const inquireHref = localizePath(locale, 'inquire');
+---
+
+<section class="hero grain" aria-label={t.hero.eyebrow}>
+  <div class="hero__bg" aria-hidden="true">
+    <img
+      src="/images/hero-cocora-valley.jpg"
+      alt={t.meta.ogAlt}
+      fetchpriority="high"
+      decoding="async"
+      class="hero__img"
+    />
+    <div class="hero__scrim"></div>
+  </div>
+
+  <div class="container hero__inner">
+    <p class="eyebrow hero__eyebrow">{t.hero.eyebrow}</p>
+    <Logo label={t.hero.wordmarkAlt} size="lg" as="h1" class="hero__wordmark" />
+    <hr class="rule hero__rule" />
+    <p class="hero__tagline">{t.hero.tagline}</p>
+    <a href={inquireHref} class="link hero__inquire">{t.hero.inquire}</a>
+  </div>
+
+  <a href="#opening" class="hero__scroll" aria-label={t.hero.scroll}>
+    <span aria-hidden="true">{t.hero.scroll}</span>
+    <span class="hero__scroll-line" aria-hidden="true"></span>
+  </a>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: grid;
+    align-items: center;
+    overflow: clip;
+    color: var(--on-dark);
+    background: var(--forest-deep);
+  }
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+  .hero__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* A very slow, almost-imperceptible drift adds life without distraction. */
+    animation: hero-drift 26s ease-in-out infinite alternate;
+  }
+  .hero__scrim {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        120% 90% at 50% 45%,
+        transparent 0%,
+        color-mix(in srgb, var(--forest-deep) 55%, transparent) 100%
+      ),
+      linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--forest-deep) 50%, transparent) 0%,
+        color-mix(in srgb, var(--forest-deep) 30%, transparent) 50%,
+        color-mix(in srgb, var(--forest-deep) 70%, transparent) 100%
+      );
+  }
+
+  .hero__inner {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-lg);
+    padding-block: var(--space-2xl);
+  }
+
+  /* Staged fade-in. Each element rises gently a touch after the previous. */
+  .hero__eyebrow,
+  .hero__wordmark,
+  .hero__rule,
+  .hero__tagline,
+  .hero__inquire {
+    opacity: 0;
+    transform: translateY(14px);
+    animation: hero-in 1100ms var(--reveal-ease) forwards;
+  }
+  .hero__eyebrow { animation-delay: 200ms; }
+  .hero__wordmark { animation-delay: 450ms; }
+  .hero__rule { animation-delay: 800ms; }
+  .hero__tagline { animation-delay: 1000ms; }
+  .hero__inquire { animation-delay: 1300ms; }
+
+  .hero__rule {
+    margin-block: var(--space-2xs);
+  }
+  .hero__tagline {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: 400;
+    max-width: 30ch;
+    line-height: 1.4;
+  }
+  .hero__inquire {
+    color: var(--on-dark);
+    margin-block-start: var(--space-sm);
+  }
+
+  .hero__scroll {
+    position: absolute;
+    z-index: 3;
+    inset-block-end: var(--space-lg);
+    inset-inline-start: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+    color: var(--on-dark);
+    text-decoration: none;
+    font-size: var(--step--1);
+    letter-spacing: var(--track-eyebrow);
+    text-transform: uppercase;
+    opacity: 0;
+    animation: hero-in 1100ms var(--reveal-ease) 1700ms forwards;
+  }
+  .hero__scroll-line {
+    width: 1px;
+    height: 48px;
+    background: color-mix(in srgb, var(--on-dark) 70%, transparent);
+    animation: scroll-pulse 2.4s ease-in-out infinite;
+    transform-origin: top;
+  }
+
+  @keyframes hero-in {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes hero-drift {
+    from { transform: scale(1.06) translate3d(0, 0, 0); }
+    to { transform: scale(1.12) translate3d(0, -1.5%, 0); }
+  }
+  @keyframes scroll-pulse {
+    0%, 100% { transform: scaleY(0.4); opacity: 0.4; }
+    50% { transform: scaleY(1); opacity: 1; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero__img,
+    .hero__scroll-line {
+      animation: none;
+    }
+    .hero__eyebrow,
+    .hero__wordmark,
+    .hero__rule,
+    .hero__tagline,
+    .hero__inquire,
+    .hero__scroll {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+  }
+</style>

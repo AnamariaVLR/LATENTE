@@ -1,0 +1,22 @@
+---
+// Scroll-reveal wrapper: fades + lifts its contents into view once.
+// The actual observer is registered once globally (see BaseLayout). This just
+// marks the element and sets an optional stagger delay. Fully neutralised under
+// `prefers-reduced-motion: reduce` via the [data-reveal] rules in global.css.
+
+interface Props {
+  /** Stagger index — multiplies a small delay so grouped items cascade in. */
+  delay?: number;
+  /** Element tag to render. */
+  as?: string;
+  class?: string;
+}
+
+const { delay = 0, as = 'div', class: className = '' } = Astro.props;
+const Tag = as as any;
+const style = delay ? `transition-delay:${delay * 110}ms` : undefined;
+---
+
+<Tag data-reveal class={className} style={style}>
+  <slot />
+</Tag>

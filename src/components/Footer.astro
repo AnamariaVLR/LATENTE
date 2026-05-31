@@ -1,0 +1,53 @@
+---
+// Footer: wordmark, single email contact, language switcher, copyright. Nothing more.
+import Logo from './Logo.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import { getDictionary, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+  path?: string;
+}
+
+const { locale, path = '' } = Astro.props;
+const t = getDictionary(locale);
+const year = new Date().getFullYear();
+---
+
+<footer class="footer section--dark">
+  <div class="container footer__inner">
+    <Logo label={t.hero.wordmarkAlt} size="sm" />
+
+    <a href={`mailto:${t.footer.email}`} class="footer__email link">{t.footer.email}</a>
+
+    <LanguageSwitcher locale={locale} path={path} tone="dark" />
+
+    <p class="footer__rights">© {year} {t.footer.rights}</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding-block: var(--space-2xl);
+    background: var(--forest);
+    color: var(--on-dark);
+  }
+  .footer__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-lg);
+  }
+  .footer__email {
+    color: var(--on-dark);
+    text-transform: none;
+    letter-spacing: 0.04em;
+    font-size: var(--step-0);
+  }
+  .footer__rights {
+    font-size: var(--step--1);
+    color: color-mix(in srgb, var(--on-dark) 60%, transparent);
+    letter-spacing: 0.04em;
+  }
+</style>

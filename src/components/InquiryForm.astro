@@ -1,0 +1,261 @@
+---
+// Inquiry form, wired for Netlify Forms (no server code).
+//
+// Netlify detects the form at deploy time by parsing the static HTML, so the
+// markup below must render server-side (it does — Astro is static).
+//   • data-netlify="true"            enables capture
+//   • hidden "form-name" input       names the submission set in the dashboard
+//   • data-netlify-honeypot          + the hidden .hp field traps bots
+//
+// Progressive enhancement: with JS the form submits via fetch and reveals the
+// inline thank-you panel; without JS it posts natively and Netlify shows its own
+// success page. Submissions are emailed to INQUIRY_EMAIL — see README to connect it.
+import { getDictionary, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+const f = t.inquire.fields;
+const opts = t.inquire.interestOptions;
+
+// One shared submission set across locales keeps the dashboard tidy.
+const FORM_NAME = 'inquiry';
+---
+
+<div class="inquiry">
+  <form
+    name={FORM_NAME}
+    method="POST"
+    data-netlify="true"
+    data-netlify-honeypot="bot-field"
+    class="form"
+    id="inquiry-form"
+  >
+    {/* Required by Netlify to associate this submission with the named form. */}
+    <input type="hidden" name="form-name" value={FORM_NAME} />
+    {/* Record which locale the inquiry came from. */}
+    <input type="hidden" name="locale" value={locale} />
+
+    {/* Honeypot: hidden from people, tempting to bots. Real users leave it blank. */}
+    <p class="hp" aria-hidden="true">
+      <label>
+        Don’t fill this out if you’re human:
+        <input name="bot-field" tabindex="-1" autocomplete="off" />
+      </label>
+    </p>
+
+    <div class="form__grid">
+      <p class="field">
+        <label for="name">{f.name}</label>
+        <input id="name" name="name" type="text" autocomplete="name" required />
+      </p>
+
+      <p class="field">
+        <label for="company">{f.company}</label>
+        <input id="company" name="company" type="text" autocomplete="organization" required />
+      </p>
+
+      <p class="field">
+        <label for="role">
+          {f.role} <span class="field__opt">({t.inquire.optionalLabel})</span>
+        </label>
+        <input id="role" name="role" type="text" autocomplete="organization-title" />
+      </p>
+
+      <p class="field">
+        <label for="email">{f.email}</label>
+        <input id="email" name="email" type="email" autocomplete="email" required />
+      </p>
+
+      <p class="field">
+        <label for="country">
+          {f.country} <span class="field__opt">({t.inquire.optionalLabel})</span>
+        </label>
+        <input id="country" name="country" type="text" autocomplete="country-name" />
+      </p>
+
+      <p class="field">
+        <label for="interest">{f.interest}</label>
+        <select id="interest" name="interest" required>
+          <option value="" disabled selected>{f.interestDefault}</option>
+          <option value="house">{opts.house}</option>
+          <option value="bespoke">{opts.bespoke}</option>
+          <option value="partnership">{opts.partnership}</option>
+        </select>
+      </p>
+
+      <p class="field field--full">
+        <label for="message">{f.message}</label>
+        <textarea id="message" name="message" rows="5" required></textarea>
+      </p>
+    </div>
+
+    <div class="form__actions">
+      <button type="submit" class="cta">{t.inquire.submit}</button>
+    </div>
+  </form>
+
+  {/* Inline success panel — revealed by JS after a successful fetch submit. */}
+  <div class="success" id="inquiry-success" role="status" aria-live="polite" hidden>
+    <p class="eyebrow">{t.inquire.eyebrow}</p>
+    <h2 class="success__title" tabindex="-1">{t.inquire.success.title}</h2>
+    <hr class="rule" />
+    <p class="success__body">{t.inquire.success.body}</p>
+    <a href={`/${locale}`} class="link spaced-link">{t.inquire.success.back}</a>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('inquiry-form') as HTMLFormElement | null;
+  const success = document.getElementById('inquiry-success');
+
+  if (form && success) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const submit = form.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+      if (submit) submit.disabled = true;
+
+      try {
+        await fetch('/', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams(data as any).toString(),
+        });
+        form.hidden = true;
+        success.hidden = false;
+        success.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        (success.querySelector('h2') as HTMLElement | null)?.focus?.();
+      } catch {
+        // Network failure: fall back to a native submit so nothing is lost.
+        if (submit) submit.disabled = false;
+        form.submit();
+      }
+    });
+  }
+</script>
+
+<style>
+  .inquiry {
+    max-width: var(--measure-wide);
+    margin-inline: auto;
+  }
+
+  .form__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-lg) var(--space-xl);
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2xs);
+    margin: 0;
+  }
+  .field--full {
+    grid-column: 1 / -1;
+  }
+  .field label {
+    font-size: var(--step--1);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--stone);
+  }
+  .field__opt {
+    text-transform: none;
+    letter-spacing: 0.02em;
+    font-style: italic;
+    opacity: 0.8;
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    border-block-end: 1px solid color-mix(in srgb, var(--ink) 28%, transparent);
+    padding-block: var(--space-xs);
+    font-family: var(--font-body);
+    font-size: var(--step-0);
+    color: var(--ink);
+    border-radius: 0;
+    transition: border-color 250ms ease;
+  }
+  textarea {
+    resize: vertical;
+    min-height: 7rem;
+  }
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-block-end-color: var(--gold);
+  }
+  select {
+    appearance: none;
+    cursor: pointer;
+  }
+
+  /* Honeypot: removed from layout and the accessibility tree. */
+  .hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+
+  .form__actions {
+    margin-block-start: var(--space-2xl);
+    text-align: center;
+  }
+  .cta {
+    display: inline-block;
+    padding: var(--space-sm) var(--space-2xl);
+    font-family: var(--font-body);
+    font-size: var(--step--1);
+    letter-spacing: var(--track-eyebrow);
+    text-transform: uppercase;
+    color: var(--on-dark);
+    background: var(--forest);
+    border: 1px solid var(--forest);
+    transition: background-color 320ms ease, border-color 320ms ease;
+  }
+  .cta:hover {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--forest-deep);
+  }
+  .cta:disabled {
+    opacity: 0.5;
+    cursor: progress;
+  }
+
+  .success {
+    text-align: center;
+    padding-block: var(--space-2xl);
+  }
+  .success__title {
+    font-size: var(--step-3);
+    margin-block-start: var(--space-sm);
+  }
+  .success__body {
+    font-size: var(--step-1);
+    font-family: var(--font-display);
+    margin-block-start: var(--space-sm);
+  }
+  .spaced-link {
+    margin-block-start: var(--space-lg);
+  }
+
+  @media (max-width: 40rem) {
+    .form__grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-lg);
+    }
+  }
+</style>

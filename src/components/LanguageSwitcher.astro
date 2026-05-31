@@ -1,0 +1,68 @@
+---
+// Minimal, unobtrusive language switcher (EN · ES · AR).
+// Links to the equivalent page in each locale, preserving the current sub-path.
+import { LOCALES, localizePath, type Locale } from '../i18n';
+import { getDictionary } from '../i18n';
+
+interface Props {
+  /** Currently active locale. */
+  locale: Locale;
+  /** Sub-path within the locale, e.g. '' for home or 'inquire'. */
+  path?: string;
+  /** Visual treatment for placement on light vs. dark backgrounds. */
+  tone?: 'light' | 'dark';
+}
+
+const { locale, path = '', tone = 'light' } = Astro.props;
+const t = getDictionary(locale);
+const codes: Record<Locale, string> = { en: 'EN', es: 'ES', ar: 'AR' };
+---
+
+<nav class:list={['lang', `lang--${tone}`]} aria-label={t.footer.languageLabel}>
+  {
+    LOCALES.map((code, i) => (
+      <>
+        {i > 0 && <span class="lang__sep" aria-hidden="true">·</span>}
+        <a
+          href={localizePath(code as Locale, path)}
+          class="lang__link"
+          hreflang={code}
+          lang={code}
+          aria-current={code === locale ? 'true' : undefined}
+        >
+          <span class="visually-hidden">{t.langNames[code as Locale]}</span>
+          <span aria-hidden="true">{codes[code as Locale]}</span>
+        </a>
+      </>
+    ))
+  }
+</nav>
+
+<style>
+  .lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6em;
+    font-family: var(--font-body);
+    font-size: var(--step--1);
+    letter-spacing: 0.18em;
+  }
+  .lang__link {
+    text-decoration: none;
+    opacity: 0.6;
+    transition: opacity 250ms ease;
+  }
+  .lang__link:hover {
+    opacity: 1;
+  }
+  .lang__link[aria-current='true'] {
+    opacity: 1;
+    color: var(--accent);
+  }
+  .lang__sep {
+    opacity: 0.4;
+  }
+  .lang--dark {
+    color: var(--on-dark);
+  }
+</style>

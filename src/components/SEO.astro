@@ -1,0 +1,54 @@
+---
+// Per-page <head> metadata: title, description, canonical, hreflang alternates,
+// Open Graph and Twitter card tags.
+import { alternates, DEFAULT_LOCALE, localizePath, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+  /** Sub-path within the locale (e.g. '' or 'inquire'). */
+  path?: string;
+  title: string;
+  description: string;
+  ogAlt: string;
+}
+
+const { locale, path = '', title, description, ogAlt } = Astro.props;
+const site = Astro.site ?? new URL('https://latente.coffee');
+
+const canonical = new URL(localizePath(locale, path), site).href;
+const ogImage = new URL('/og-image.jpg', site).href;
+const langs = alternates(path);
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+
+{/* hreflang alternates for every locale + x-default pointing at English. */}
+{
+  langs.map((alt) => (
+    <link rel="alternate" hreflang={alt.locale} href={new URL(alt.href, site).href} />
+  ))
+}
+<link
+  rel="alternate"
+  hreflang="x-default"
+  href={new URL(localizePath(DEFAULT_LOCALE, path), site).href}
+/>
+
+{/* Open Graph */}
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="LATENTE" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:locale" content={locale} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:alt" content={ogAlt} />
+
+{/* Twitter */}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+<meta name="twitter:image:alt" content={ogAlt} />

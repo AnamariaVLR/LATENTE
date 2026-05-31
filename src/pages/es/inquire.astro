@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import InquireContent from '../../components/InquireContent.astro';
+import { getDictionary } from '../../i18n';
+
+const locale = 'es' as const;
+const t = getDictionary(locale);
+---
+
+<BaseLayout
+  locale={locale}
+  path="inquire"
+  title={t.inquire.metaTitle}
+  description={t.inquire.metaDescription}
+  ogAlt={t.meta.ogAlt}
+  headerTone="solid"
+>
+  <InquireContent locale={locale} />
+</BaseLayout>

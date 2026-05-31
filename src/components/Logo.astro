@@ -1,0 +1,64 @@
+---
+// Logo / wordmark.
+//
+// PLACEHOLDER: the real LATENTE wordmark uses a palm tree in place of the "T".
+// Until the brand SVG is supplied, we render the wordmark in the display serif
+// with wide tracking. To drop in the real artwork:
+//   1. Save the supplied vector to /public/logo.svg
+//   2. Set `useSvg = true` below (or pass the `svg` prop).
+// The surrounding markup, sizing and accessible name stay identical.
+
+interface Props {
+  /** Accessible label for the mark (the brand name in the active locale). */
+  label: string;
+  /** Visual size. */
+  size?: 'sm' | 'md' | 'lg';
+  /** Render as an <h1> (used once per page, in the hero). */
+  as?: 'span' | 'h1';
+  class?: string;
+}
+
+const { label, size = 'md', as = 'span', class: className = '' } = Astro.props;
+const Tag = as;
+
+// Flip to true once /public/logo.svg holds the real wordmark.
+const useSvg = false;
+---
+
+<Tag class:list={['logo', `logo--${size}`, className]} aria-label={label}>
+  {
+    useSvg ? (
+      <img src="/logo.svg" alt={label} class="logo__svg" width="320" height="64" />
+    ) : (
+      <span class="logo__text" aria-hidden="true">LATENTE</span>
+    )
+  }
+</Tag>
+
+<style>
+  .logo {
+    display: inline-block;
+    margin: 0;
+    line-height: 1;
+  }
+  .logo__text {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: var(--track-wordmark);
+    /* Offset the trailing letter-spacing so the wordmark stays optically centred. */
+    text-indent: var(--track-wordmark);
+    text-transform: uppercase;
+    display: inline-block;
+  }
+  .logo--sm .logo__text { font-size: var(--step-1); }
+  .logo--md .logo__text { font-size: var(--step-2); }
+  .logo--lg .logo__text { font-size: var(--step-4); }
+
+  .logo__svg {
+    height: auto;
+    width: auto;
+  }
+  .logo--sm .logo__svg { max-height: 1.4rem; }
+  .logo--md .logo__svg { max-height: 2.2rem; }
+  .logo--lg .logo__svg { max-height: clamp(3rem, 9vw, 6rem); }
+</style>

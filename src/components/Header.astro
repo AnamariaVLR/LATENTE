@@ -1,0 +1,85 @@
+---
+// Almost-invisible navigation: just the wordmark, a single "Inquire" link and
+// the language switcher. No menu. On the homepage it sits transparently over the
+// hero; on inner pages it rests on a solid forest band.
+import Logo from './Logo.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import { getDictionary, localizePath, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+  /** Sub-path for the language switcher to preserve (e.g. '' or 'inquire'). */
+  path?: string;
+  /** 'over' = transparent over the hero; 'solid' = forest band on inner pages. */
+  tone?: 'over' | 'solid';
+}
+
+const { locale, path = '', tone = 'over' } = Astro.props;
+const t = getDictionary(locale);
+const home = localizePath(locale);
+const inquireHref = localizePath(locale, 'inquire');
+const onInquire = path === 'inquire';
+---
+
+<header class:list={['header', `header--${tone}`]}>
+  <div class="container header__inner">
+    <a href={home} class="header__brand" aria-label={t.nav.home}>
+      <Logo label={t.hero.wordmarkAlt} size="sm" />
+    </a>
+
+    <div class="header__end">
+      {
+        !onInquire && (
+          <a href={inquireHref} class="link header__inquire">
+            {t.nav.inquire}
+          </a>
+        )
+      }
+      <LanguageSwitcher locale={locale} path={path} tone="dark" />
+    </div>
+  </div>
+</header>
+
+<style>
+  .header {
+    inset-block-start: 0;
+    inset-inline: 0;
+    z-index: 20;
+    padding-block: var(--space-md);
+    color: var(--on-dark);
+  }
+  /* Transparent over the hero, but sitting above it absolutely so the hero image
+     fills the full viewport behind it. */
+  .header--over {
+    position: absolute;
+  }
+  .header--solid {
+    position: relative;
+    background: var(--forest);
+  }
+
+  .header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+  }
+  .header__brand {
+    text-decoration: none;
+    color: inherit;
+  }
+  .header__end {
+    display: flex;
+    align-items: center;
+    gap: clamp(var(--space-md), 4vw, var(--space-xl));
+  }
+  .header__inquire {
+    color: var(--on-dark);
+  }
+
+  @media (max-width: 30rem) {
+    .header__end {
+      gap: var(--space-md);
+    }
+  }
+</style>
