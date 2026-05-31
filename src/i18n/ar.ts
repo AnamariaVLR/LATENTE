@@ -33,7 +33,7 @@ const ar: Dictionary = {
   hero: {
     wordmarkAlt: 'LATENTE',
     eyebrow: 'برنامج القهوة المميّز',
-    tagline: 'قهوة كولومبية منتقاة، مصمّمة كهوية.',
+    tagline: 'قهوة كولومبية منتقاة',
     inquire: 'استفسار',
     scroll: 'انزل',
   },

@@ -21,7 +21,7 @@ const inquireHref = localizePath(locale, 'inquire');
 const onInquire = path === 'inquire';
 ---
 
-<header class:list={['header', `header--${tone}`]}>
+<header class:list={['header', `header--${tone}`, { 'is-top': tone === 'over' }]}>
   <div class="container header__inner">
     <a href={home} class="header__brand" aria-label={t.nav.home}>
       <Logo label={t.hero.wordmarkAlt} size="sm" />
@@ -40,6 +40,35 @@ const onInquire = path === 'inquire';
   </div>
 </header>
 
+{/* Without JS the header can't react to scroll, so reveal the wordmark + band. */}
+<noscript>
+  <style>
+    .header--over {
+      background: var(--forest) !important;
+    }
+    .header--over .header__brand {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: none !important;
+    }
+  </style>
+</noscript>
+
+<script>
+  // Hide the wordmark while the hero fills the screen; fade it (and the forest
+  // band) in once the page has scrolled past most of the first viewport.
+  const header = document.querySelector('.header--over');
+  if (header) {
+    const update = () => {
+      const trigger = Math.min(window.innerHeight * 0.6, 520);
+      header.classList.toggle('is-top', window.scrollY < trigger);
+    };
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update, { passive: true });
+  }
+</script>
+
 <style>
   .header {
     inset-block-start: 0;
@@ -48,10 +77,17 @@ const onInquire = path === 'inquire';
     padding-block: var(--space-md);
     color: var(--on-dark);
   }
-  /* Transparent over the hero, but sitting above it absolutely so the hero image
-     fills the full viewport behind it. */
+  /* On the homepage the header is fixed and transparent over the hero, then a
+     forest band fades in as the page scrolls. (Inner pages use a solid band.) */
   .header--over {
-    position: absolute;
+    position: fixed;
+    background: transparent;
+    transition: background-color 500ms ease, box-shadow 500ms ease;
+  }
+  /* Scrolled state: the band appears. */
+  .header--over:not(.is-top) {
+    background: var(--forest);
+    box-shadow: 0 1px 0 var(--hairline);
   }
   .header--solid {
     position: relative;
@@ -67,6 +103,22 @@ const onInquire = path === 'inquire';
   .header__brand {
     text-decoration: none;
     color: inherit;
+  }
+  /* The wordmark is hidden while the hero is in view, then rises in on scroll. */
+  .header--over .header__brand {
+    transition: opacity 600ms ease, transform 600ms ease, visibility 600ms;
+  }
+  .header--over.is-top .header__brand {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .header--over,
+    .header--over .header__brand {
+      transition: none;
+    }
   }
   .header__end {
     display: flex;

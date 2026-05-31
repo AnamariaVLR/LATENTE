@@ -23,7 +23,7 @@ const en: Dictionary = {
   hero: {
     wordmarkAlt: 'LATENTE',
     eyebrow: 'Signature Coffee Program',
-    tagline: 'Curated Colombian coffee, designed as identity.',
+    tagline: 'Curated Colombian Coffee',
     inquire: 'Inquire',
     scroll: 'Scroll',
   },

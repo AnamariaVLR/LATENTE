@@ -27,7 +27,7 @@ const es: Dictionary = {
   hero: {
     wordmarkAlt: 'LATENTE',
     eyebrow: 'Programa de Café de Autor',
-    tagline: 'Café colombiano curado, diseñado como identidad.',
+    tagline: 'Café Colombiano Curado',
     inquire: 'Consultar',
     scroll: 'Descender',
   },
