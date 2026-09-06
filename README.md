@@ -159,6 +159,33 @@ Environment knobs (all optional): `SITE_URL`, `BASE_PATH`,
 
 ---
 
+## Field Notes — the monthly insight section
+
+A data-led editorial section ("Field Notes") on the homepage, with an archive at
+`/insights`. Each note is one measured observation from cultivation, processing
+or curation — altitude, °Brix at picking, fermentation hours and pH, moisture and
+water activity, cupping scores — written in the brand's restrained voice.
+
+**How it updates monthly, for free.** Notes live in `src/content/insights/` as
+`YYYY-MM.json` (validated by `src/content.config.ts`). The build shows only notes
+whose `date` has arrived, newest first, and the deploy workflow also runs on a
+**schedule on the 1st of every month**, so a note written ahead of time publishes
+itself. Write several months in advance; nothing else is needed.
+
+To add a month: copy the latest JSON, bump `number`, set `date` to the first of
+the month, and fill `stage`, `title`, `lede`, `body` (paragraphs), 3–6 `metrics`
+(value, unit, label, short note) and `sources`. Text fields carry `en` / `es` /
+`ar` variants; a missing locale falls back to English. The shipped notes are
+editorial drafts built on published specialty-coffee standards (SCA cupping and
+green-coffee standards, Cenicafé guidance) — review the figures against your own
+farm data before launch.
+
+If production runs on Netlify, add a repository secret `NETLIFY_BUILD_HOOK`
+(Netlify → Site configuration → Build hooks) and the same monthly schedule
+triggers the production build too.
+
+---
+
 ## Design system & customisation
 
 Everything visual is centralised — swapping these re-skins the whole site.
@@ -166,12 +193,17 @@ Everything visual is centralised — swapping these re-skins the whole site.
 - **Colours, type scale, spacing, motion, photo grade:** `src/styles/tokens.css`.
   The `--grade-*` tokens apply one "film stock" (gentle desaturation + a forest
   colour cast) to every photograph so the set reads as art-directed.
-- **Typography:** true **small caps** (`smcp`) for eyebrows and labels, old-style
-  figures in running text, lining figures in headings/forms — all from the
-  fonts' own OpenType tables (`global.css`).
-- **Fonts:** `src/styles/fonts.css`. Both Garamonds are single **variable** files
-  subset via `scripts/fonts.sh`. To use a brand font, drop the woff2 into
-  `public/fonts/`, update the `@font-face` and the `--font-*` tokens.
+- **Typography:** display face **Bodoni Moda** — an Italian high-contrast Didone
+  with an optical-size axis, chosen because its hairline serifs echo the wax
+  palms of the hero and the Didone voice is the shared language of global luxury
+  (fashion houses, hospitality), distinct from the Garamond most artisan brands
+  use. Body face **EB Garamond** for reading comfort, with true **small caps**
+  (`smcp`) for eyebrows and labels, old-style figures in running text and lining,
+  tabular figures in headings, data and forms — all from the fonts' own OpenType
+  tables (`global.css`).
+- **Fonts:** `src/styles/fonts.css`. Both faces are single **variable** files
+  subset via `scripts/fonts.sh` (`npm run fonts`). To use a brand font, drop the
+  woff2 into `public/fonts/`, update the `@font-face` and the `--font-*` tokens.
 - **Logo:** replace `public/logo.svg` with the real wordmark (the brand mark places
   a palm tree in the "T"), then set `useSvg = true` in `Logo.astro`.
 

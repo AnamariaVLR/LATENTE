@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import InsightsContent from '../../components/InsightsContent.astro';
+import { getDictionary } from '../../i18n';
+
+const locale = 'es' as const;
+const t = getDictionary(locale);
+---
+
+<BaseLayout
+  locale={locale}
+  path="insights"
+  title={t.insights.metaTitle}
+  description={t.insights.metaDescription}
+  ogAlt={t.meta.ogAlt}
+  headerTone="solid"
+>
+  <InsightsContent locale={locale} />
+</BaseLayout>

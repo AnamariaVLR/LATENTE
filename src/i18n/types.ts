@@ -78,9 +78,26 @@ export interface Dictionary {
   footer: {
     email: string;
     dossier: string;
+    notes: string;
     privacy: string;
     rights: string;
     languageLabel: string;
+  };
+
+  /** Field Notes — the monthly, data-led insight section and its archive page. */
+  insights: {
+    eyebrow: string;
+    note: string;
+    title: string;
+    intro: string;
+    monthly: string;
+    readMore: string;
+    archive: string;
+    metaTitle: string;
+    metaDescription: string;
+    archiveTitle: string;
+    archiveIntro: string;
+    sources: string;
   };
 
   inquire: {

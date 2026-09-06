@@ -1,0 +1,38 @@
+{
+  "date": "2026-09-01",
+  "number": 2,
+  "stage": { "en": "Harvest", "es": "Cosecha", "ar": "الحصاد" },
+  "title": {
+    "en": "Reading ripeness in degrees Brix",
+    "es": "Leer la madurez en grados Brix",
+    "ar": "قراءة النضج بدرجات بريكس"
+  },
+  "lede": {
+    "en": "Colour is a rumour; sugar is a fact. At altitude, cherries mature for weeks longer, and we pick against a refractometer reading rather than a calendar.",
+    "es": "El color es un rumor; el azúcar es un hecho. En altura, las cerezas maduran durante semanas más, y recolectamos según la lectura del refractómetro y no según el calendario.",
+    "ar": "اللون إشاعة؛ السكر حقيقة. على الارتفاعات تنضج الثمار لأسابيع أطول، ونقطف وفق قراءة مقياس الانكسار لا وفق التقويم."
+  },
+  "body": {
+    "en": [
+      "Between 1,850 and 2,100 metres in southern Huila and Nariño, the coffee tree does something it cannot do lower down: it takes its time. Cooler nights slow the cherry's maturation from roughly 180 days after flowering to 210–240, and that extra month is where the complexity of a High Bloom is built — sugars accumulate, acids soften into structure, and the seed densifies.",
+      "We do not pick by colour. A refractometer at the tree gives the cherry's soluble sugar in degrees Brix, and our harvest window opens at 20 °Bx and closes at 24. Below it, a coffee is thin and grassy; above it, it drifts toward over-ripe ferment. Pickers pass the same tree three to five times over a season, taking only what the instrument confirms.",
+      "Every lot is then float-sorted in water and inspected by hand, with a working threshold of at least ninety-five percent fully ripe cherry before it is allowed to enter fermentation. The cupping table is where these decisions are audited: our House Coffees are curated from lots scoring 86 and above on the SCA protocol."
+    ],
+    "es": [
+      "Entre 1.850 y 2.100 metros en el sur del Huila y en Nariño, el cafeto hace algo que no puede hacer más abajo: tomarse su tiempo. Las noches más frías ralentizan la maduración de la cereza de unos 180 días tras la floración a 210–240, y en ese mes adicional se construye la complejidad de un High Bloom: se acumulan los azúcares, los ácidos se suavizan en estructura y la semilla gana densidad.",
+      "No recolectamos por color. Un refractómetro junto al árbol indica el azúcar soluble de la cereza en grados Brix, y nuestra ventana de cosecha se abre a 20 °Bx y se cierra a 24. Por debajo, el café resulta delgado y herbáceo; por encima, deriva hacia la sobremaduración. Los recolectores pasan por el mismo árbol de tres a cinco veces en la temporada, tomando solo lo que el instrumento confirma.",
+      "Cada lote se clasifica luego por flotación en agua y se inspecciona a mano, con un umbral de trabajo de al menos noventa y cinco por ciento de cereza plenamente madura antes de entrar en fermentación. La mesa de catación es donde se auditan estas decisiones: nuestros Cafés de la Casa se curan a partir de lotes que puntúan 86 o más según el protocolo SCA."
+    ]
+  },
+  "metrics": [
+    { "label": { "en": "Altitude", "es": "Altitud", "ar": "الارتفاع" }, "value": "1,850–2,100", "unit": "m", "note": { "en": "southern Huila · Nariño", "es": "sur del Huila · Nariño", "ar": "جنوب هويلا · نارينيو" } },
+    { "label": { "en": "Cherry sugar at picking", "es": "Azúcar de la cereza al recolectar", "ar": "سكر الثمرة عند القطف" }, "value": "20–24", "unit": "°Bx", "note": { "en": "refractometer, at the tree", "es": "refractómetro, junto al árbol", "ar": "مقياس الانكسار عند الشجرة" } },
+    { "label": { "en": "Maturation", "es": "Maduración", "ar": "النضج" }, "value": "210–240", "unit": "days", "note": { "en": "from flowering", "es": "desde la floración", "ar": "منذ الإزهار" } },
+    { "label": { "en": "Fully ripe cherry", "es": "Cereza plenamente madura", "ar": "ثمار ناضجة تماماً" }, "value": "≥ 95", "unit": "%", "note": { "en": "float + hand sorting", "es": "flotación + selección manual", "ar": "تعويم + فرز يدوي" } },
+    { "label": { "en": "Cupping score", "es": "Puntaje de catación", "ar": "درجة التذوق" }, "value": "86+", "unit": "/ 100", "note": { "en": "SCA protocol", "es": "protocolo SCA", "ar": "بروتوكول SCA" } }
+  ],
+  "sources": [
+    "Specialty Coffee Association — Cupping Protocols and Standards",
+    "Cenicafé — Avances Técnicos on harvest maturity and Brix measurement"
+  ]
+}

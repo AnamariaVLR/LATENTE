@@ -1,0 +1,38 @@
+{
+  "date": "2026-08-01",
+  "number": 1,
+  "stage": { "en": "Drying", "es": "Secado", "ar": "التجفيف" },
+  "title": {
+    "en": "The slowest step is the most decisive",
+    "es": "El paso más lento es el más decisivo",
+    "ar": "أبطأ خطوة هي الأكثر حسماً"
+  },
+  "lede": {
+    "en": "A coffee can be picked and fermented perfectly and still be lost on the drying bed. We hold green to a narrow window of moisture and water activity, reached slowly.",
+    "es": "Un café puede recolectarse y fermentarse a la perfección y perderse igualmente en la cama de secado. Llevamos el grano verde a una ventana estrecha de humedad y actividad de agua, alcanzada lentamente.",
+    "ar": "قد تُقطف القهوة وتُخمَّر بإتقان ثم تضيع على سرير التجفيف. نُبقي الحبوب الخضراء ضمن نافذة ضيقة من الرطوبة والنشاط المائي، تُبلَغ ببطء."
+  },
+  "body": {
+    "en": [
+      "Drying decides whether everything achieved at altitude survives the journey. Dried too fast, the bean's outer layers harden around a still-moist core; the coffee cups well for a month and then fades. Dried too slowly, moulds and unwanted fermentation take hold. The target is not a number but a curve: a steady descent to 10.5–11.5% moisture over roughly two weeks, with bean temperature never allowed above 40 °C.",
+      "We dry on raised beds under shade cloth, in layers no deeper than three centimetres, turned six times a day so no bean sits in its own humidity. Moisture is read daily with a calibrated meter; water activity — the measure that governs shelf stability — is confirmed at 0.60 aw or below before a lot is rested. Only then does a coffee earn its place in the House.",
+      "This is why we speak of precision rather than craft alone. Craft is the hand that turns the bed; precision is the instrument that tells the hand when to stop."
+    ],
+    "es": [
+      "El secado decide si todo lo logrado en altura sobrevive al viaje. Secado demasiado rápido, las capas exteriores del grano se endurecen alrededor de un núcleo aún húmedo; el café tasa bien durante un mes y luego se apaga. Secado demasiado lento, aparecen mohos y fermentaciones no deseadas. El objetivo no es una cifra sino una curva: un descenso constante hasta 10,5–11,5% de humedad en unas dos semanas, sin permitir que la temperatura del grano supere los 40 °C.",
+      "Secamos en camas elevadas bajo malla de sombra, en capas de no más de tres centímetros, volteadas seis veces al día para que ningún grano repose en su propia humedad. La humedad se lee a diario con un medidor calibrado; la actividad de agua —la medida que rige la estabilidad en almacenamiento— se confirma en 0,60 aw o menos antes de dejar reposar un lote. Solo entonces un café se gana su lugar en la Casa.",
+      "Por eso hablamos de precisión y no solo de oficio. El oficio es la mano que voltea la cama; la precisión es el instrumento que le dice a la mano cuándo detenerse."
+    ]
+  },
+  "metrics": [
+    { "label": { "en": "Green moisture", "es": "Humedad del grano verde", "ar": "رطوبة الحبوب الخضراء" }, "value": "10.5–11.5", "unit": "%", "note": { "en": "target at rest", "es": "objetivo en reposo", "ar": "الهدف عند الراحة" } },
+    { "label": { "en": "Water activity", "es": "Actividad de agua", "ar": "النشاط المائي" }, "value": "≤ 0.60", "unit": "aw", "note": { "en": "before storage", "es": "antes de almacenar", "ar": "قبل التخزين" } },
+    { "label": { "en": "Drying duration", "es": "Duración del secado", "ar": "مدة التجفيف" }, "value": "12–18", "unit": "days", "note": { "en": "raised beds, shade", "es": "camas elevadas, sombra", "ar": "أسرّة مرتفعة، ظل" } },
+    { "label": { "en": "Bean temperature", "es": "Temperatura del grano", "ar": "حرارة الحبة" }, "value": "≤ 40", "unit": "°C", "note": { "en": "never exceeded", "es": "nunca superada", "ar": "لا تُتجاوز أبداً" } },
+    { "label": { "en": "Bed depth", "es": "Espesor de capa", "ar": "سماكة الطبقة" }, "value": "≤ 3", "unit": "cm", "note": { "en": "turned 6× daily", "es": "volteada 6× al día", "ar": "تُقلَّب 6 مرات يومياً" } }
+  ],
+  "sources": [
+    "Specialty Coffee Association — Green Coffee Standards (moisture and water activity)",
+    "Cenicafé (Federación Nacional de Cafeteros) — technical guidance on solar drying"
+  ]
+}

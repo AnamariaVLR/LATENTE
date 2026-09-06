@@ -120,9 +120,28 @@ const es: Dictionary = {
   footer: {
     email: INQUIRY_EMAIL,
     dossier: 'Solicitar el dossier completo',
+    notes: 'Notas de Campo',
     privacy: 'Privacidad',
     rights: 'LATENTE. Todos los derechos reservados.',
     languageLabel: 'Idioma',
+  },
+
+  insights: {
+    eyebrow: 'Notas de Campo',
+    note: 'Nota',
+    title: 'La precisión detrás de la taza',
+    intro:
+      'Cada mes, una observación medida del cultivo, el procesamiento o la curaduría: las cifras que separan un buen café de uno excepcional.',
+    monthly: 'Una nueva nota cada mes',
+    readMore: 'Leer la nota de este mes',
+    archive: 'Todas las notas de campo',
+    metaTitle: 'Notas de Campo — LATENTE',
+    metaDescription:
+      'Notas mensuales, basadas en datos, sobre la precisión detrás del cultivo, el procesamiento y la curaduría del café de alta gama.',
+    archiveTitle: 'Notas de Campo',
+    archiveIntro:
+      'Un registro mensual de las mediciones y decisiones detrás de los cafés de LATENTE: cultivo, procesamiento y curaduría, en cifras.',
+    sources: 'Referencias',
   },
 
   inquire: {

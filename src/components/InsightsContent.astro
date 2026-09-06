@@ -1,0 +1,169 @@
+---
+// The /insights archive: every published Field Note, newest first, in full.
+import Section from './Section.astro';
+import ScrollReveal from './ScrollReveal.astro';
+import { getDictionary, type Locale } from '../i18n';
+import { monthLabel, pad, pick, publishedInsights } from '../lib/insights';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+const notes = await publishedInsights();
+---
+
+<Section variant="light" label={t.insights.archiveTitle}>
+  <ScrollReveal class="measure center archive-head">
+    <p class="eyebrow">{t.insights.eyebrow}</p>
+    <h1 class="archive-title">{t.insights.archiveTitle}</h1>
+    <hr class="rule" />
+    <p class="archive-intro">{t.insights.archiveIntro}</p>
+  </ScrollReveal>
+
+  <div class="measure-wide">
+    {
+      notes.map((n) => (
+        <article id={n.id} class="note">
+          <ScrollReveal>
+            <p class="eyebrow note__meta">
+              {pick(n.data.stage, locale)}
+              <span class="note__sep" aria-hidden="true">·</span>
+              {t.insights.note} {pad(n.data.number)}
+              <span class="note__sep" aria-hidden="true">·</span>
+              <time datetime={n.data.date.toISOString().slice(0, 7)}>
+                {monthLabel(n.data.date, t.htmlLang)}
+              </time>
+            </p>
+            <h2 class="note__title">{pick(n.data.title, locale)}</h2>
+            <p class="note__lede">{pick(n.data.lede, locale)}</p>
+          </ScrollReveal>
+
+          <ScrollReveal as="dl" class="note__metrics">
+            {n.data.metrics.map((m) => (
+              <div class="note__metric">
+                <dt>{pick(m.label, locale)}</dt>
+                <dd>
+                  <span class="note__value">{m.value}</span>
+                  {m.unit && <span class="note__unit"> {m.unit}</span>}
+                  {m.note && <span class="note__mnote"> — {pick(m.note, locale)}</span>}
+                </dd>
+              </div>
+            ))}
+          </ScrollReveal>
+
+          <ScrollReveal class="note__body">
+            {pick(n.data.body, locale).map((p) => (
+              <p>{p}</p>
+            ))}
+            {n.data.sources.length > 0 && (
+              <p class="note__sources">
+                <span class="note__sources-label">{t.insights.sources}</span>
+                {n.data.sources.join(' · ')}
+              </p>
+            )}
+          </ScrollReveal>
+        </article>
+      ))
+    }
+  </div>
+</Section>
+
+<style>
+  .archive-head {
+    margin-block-end: var(--space-2xl);
+  }
+  .archive-title {
+    font-size: var(--step-2);
+    margin-block-start: var(--space-sm);
+  }
+  .archive-intro {
+    margin-block-start: var(--space-md);
+    line-height: var(--leading-body);
+    color: var(--stone);
+  }
+
+  .note {
+    padding-block: var(--space-2xl);
+    border-block-start: 1px solid var(--hairline);
+    scroll-margin-block-start: 6rem;
+  }
+  .note__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5em;
+  }
+  .note__sep {
+    opacity: 0.45;
+  }
+  .note__title {
+    font-size: var(--step-2);
+    margin-block-start: var(--space-sm);
+  }
+  .note__lede {
+    font-size: var(--step-1);
+    line-height: 1.5;
+    margin-block-start: var(--space-md);
+    color: var(--stone);
+  }
+
+  .note__metrics {
+    margin-block-start: var(--space-xl);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: var(--space-md) var(--space-xl);
+  }
+  .note__metric dt {
+    font-size: var(--step--1);
+    font-variant-caps: small-caps;
+    font-feature-settings: 'smcp' 1, 'c2sc' 1;
+    letter-spacing: 0.1em;
+    color: var(--stone);
+  }
+  :global(html[dir='rtl']) .note__metric dt {
+    font-variant-caps: normal;
+    font-feature-settings: normal;
+    letter-spacing: normal;
+  }
+  .note__metric dd {
+    margin: 0.1em 0 0;
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+  .note__value {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    color: var(--forest);
+  }
+  .note__unit {
+    color: var(--stone);
+  }
+  .note__mnote {
+    font-size: var(--step--1);
+    color: var(--stone);
+  }
+
+  .note__body {
+    margin-block-start: var(--space-xl);
+    max-width: var(--measure);
+  }
+  .note__body p + p {
+    margin-block-start: var(--space-md);
+  }
+  .note__sources {
+    margin-block-start: var(--space-lg);
+    font-size: var(--step--1);
+    color: var(--stone);
+  }
+  .note__sources-label {
+    font-variant-caps: small-caps;
+    font-feature-settings: 'smcp' 1, 'c2sc' 1;
+    letter-spacing: 0.1em;
+    margin-inline-end: 0.75em;
+  }
+  :global(html[dir='rtl']) .note__sources-label {
+    font-variant-caps: normal;
+    font-feature-settings: normal;
+    letter-spacing: normal;
+  }
+</style>

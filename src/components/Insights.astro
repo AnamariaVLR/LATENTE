@@ -1,0 +1,146 @@
+---
+// Field Notes — the homepage section. Shows the most recent published note:
+// a small meta line, the title and lede, a quiet row of measured values, and
+// links to the archive. Content comes from src/content/insights/*.json.
+import ScrollReveal from './ScrollReveal.astro';
+import Section from './Section.astro';
+import { getDictionary, localizePath, type Locale } from '../i18n';
+import { monthLabel, pad, pick, publishedInsights } from '../lib/insights';
+
+interface Props {
+  locale: Locale;
+  /** Position in the homepage section index. */
+  index?: string;
+}
+
+const { locale, index } = Astro.props;
+const t = getDictionary(locale);
+const notes = await publishedInsights();
+const latest = notes[0];
+const archiveHref = localizePath(locale, 'insights');
+---
+
+{
+  latest && (
+    <Section variant="dark" label={t.insights.eyebrow} index={index}>
+      <ScrollReveal class="notes measure-wide center">
+        <p class="eyebrow notes__meta">
+          {t.insights.eyebrow}
+          <span class="notes__sep" aria-hidden="true">·</span>
+          {t.insights.note} {pad(latest.data.number)}
+          <span class="notes__sep" aria-hidden="true">·</span>
+          <time datetime={latest.data.date.toISOString().slice(0, 7)}>
+            {monthLabel(latest.data.date, t.htmlLang)}
+          </time>
+        </p>
+        <h2 class="notes__title">{pick(latest.data.title, locale)}</h2>
+        <hr class="rule" />
+        <p class="notes__lede">{pick(latest.data.lede, locale)}</p>
+      </ScrollReveal>
+
+      <ol class="metrics">
+        {latest.data.metrics.map((m, i) => (
+          <ScrollReveal as="li" delay={i} class="metric">
+            <p class="metric__value">
+              {m.value}
+              {m.unit && <span class="metric__unit">{m.unit}</span>}
+            </p>
+            <p class="metric__label">{pick(m.label, locale)}</p>
+            {m.note && <p class="metric__note">{pick(m.note, locale)}</p>}
+          </ScrollReveal>
+        ))}
+      </ol>
+
+      <ScrollReveal class="notes__links center">
+        <a href={`${archiveHref}#${latest.id}`} class="link notes__link">{t.insights.readMore}</a>
+        <span class="notes__sep" aria-hidden="true">·</span>
+        <a href={archiveHref} class="link notes__link">{t.insights.archive}</a>
+        <p class="notes__monthly">{t.insights.monthly}</p>
+      </ScrollReveal>
+    </Section>
+  )
+}
+
+<style>
+  .notes__meta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5em;
+  }
+  .notes__sep {
+    opacity: 0.45;
+  }
+  .notes__title {
+    font-size: var(--step-2);
+    margin-block: var(--space-sm) 0;
+  }
+  .notes__lede {
+    font-family: var(--font-body);
+    font-size: var(--step-1);
+    line-height: 1.5;
+    margin-block-start: var(--space-md);
+    color: color-mix(in srgb, var(--on-dark) 88%, transparent);
+  }
+
+  /* The data: quiet tiles separated by hairlines, numerals in the display face. */
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+    gap: var(--space-xl) var(--space-lg);
+    max-width: var(--container);
+    margin: var(--space-2xl) auto 0;
+  }
+  .metric {
+    border-block-start: 1px solid var(--hairline);
+    padding-block-start: var(--space-md);
+    text-align: start;
+  }
+  .metric__value {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    font-variant-numeric: lining-nums tabular-nums;
+    line-height: 1.1;
+    /* Gold is safe here: large text clears WCAG AA at 3:1 on forest. */
+    color: var(--accent);
+  }
+  .metric__unit {
+    font-size: 0.45em;
+    letter-spacing: 0.04em;
+    margin-inline-start: 0.35em;
+    color: color-mix(in srgb, var(--on-dark) 70%, transparent);
+    vertical-align: 0.15em;
+  }
+  .metric__label {
+    margin-block-start: var(--space-xs);
+    font-variant-caps: small-caps;
+    font-feature-settings: 'smcp' 1, 'c2sc' 1;
+    letter-spacing: 0.1em;
+    color: var(--on-dark);
+  }
+  .metric__note {
+    font-size: var(--step--1);
+    color: color-mix(in srgb, var(--on-dark) 62%, transparent);
+    margin-block-start: 0.15em;
+  }
+  :global(html[dir='rtl']) .metric__label {
+    font-variant-caps: normal;
+    font-feature-settings: normal;
+    letter-spacing: normal;
+  }
+
+  .notes__links {
+    margin-block-start: var(--space-2xl);
+  }
+  .notes__link {
+    color: var(--on-dark);
+  }
+  .notes__links .notes__sep {
+    margin-inline: var(--space-sm);
+  }
+  .notes__monthly {
+    margin-block-start: var(--space-md);
+    font-size: var(--step--1);
+    color: color-mix(in srgb, var(--on-dark) 55%, transparent);
+  }
+</style>

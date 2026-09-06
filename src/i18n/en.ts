@@ -116,9 +116,28 @@ const en: Dictionary = {
   footer: {
     email: INQUIRY_EMAIL,
     dossier: 'Request the full dossier',
+    notes: 'Field Notes',
     privacy: 'Privacy',
     rights: 'LATENTE. All rights reserved.',
     languageLabel: 'Language',
+  },
+
+  insights: {
+    eyebrow: 'Field Notes',
+    note: 'Note',
+    title: 'The precision behind the cup',
+    intro:
+      'Each month, one measured observation from cultivation, processing or curation — the numbers that separate a good coffee from an exceptional one.',
+    monthly: 'A new note each month',
+    readMore: 'Read this month’s note',
+    archive: 'All field notes',
+    metaTitle: 'Field Notes — LATENTE',
+    metaDescription:
+      'Monthly, data-led notes on the precision behind high-end coffee cultivation, processing and curation.',
+    archiveTitle: 'Field Notes',
+    archiveIntro:
+      'A monthly record of the measurements and decisions behind LATENTE’s coffees — cultivation, processing and curation, in numbers.',
+    sources: 'References',
   },
 
   inquire: {

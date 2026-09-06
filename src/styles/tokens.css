@@ -24,7 +24,11 @@
   --accent: var(--gold);
 
   /* --- Typography --------------------------------------------------------- */
-  --font-display: 'Cormorant Garamond', 'Amiri', Georgia, 'Times New Roman', serif;
+  /* Display: a high-contrast Didone. Its hairline serifs echo the thin trunks of
+     the wax palms in the hero, and the Didone voice is the shared language of
+     global luxury (fashion, hospitality) — distinct from the Garamond every
+     artisan brand uses. Body stays a text Garamond for reading comfort. */
+  --font-display: 'Bodoni Moda', 'Didot', 'Bodoni MT', 'Amiri', Georgia, 'Times New Roman', serif;
   --font-body: 'EB Garamond', 'Amiri', Georgia, 'Times New Roman', serif;
 
   /* Fluid type scale (clamp: min, preferred, max) — large and confident. */
@@ -38,9 +42,10 @@
   --leading-body: 1.7;
   --leading-tight: 1.15;
 
-  /* Tracking — wide letter-spacing belongs ONLY to wordmark / short display. */
+  /* Tracking — wide letter-spacing belongs ONLY to wordmark / short display.
+     A Didone carries less tracking than a Garamond: keep headings tight. */
   --track-wordmark: 0.42em;
-  --track-display: 0.16em;
+  --track-display: 0.06em;
   --track-eyebrow: 0.30em;
   --track-body: normal;
 

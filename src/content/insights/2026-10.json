@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-01",
+  "number": 3,
+  "stage": { "en": "Fermentation", "es": "Fermentación", "ar": "التخمير" },
+  "title": {
+    "en": "A transformation, held under control",
+    "es": "Una transformación bajo control",
+    "ar": "تحوّل تحت السيطرة"
+  },
+  "lede": {
+    "en": "Fermentation is where a Ferment Light gains its aromatic complexity — and where most coffees lose theirs. We measure it in hours, degrees and pH, not in guesswork.",
+    "es": "La fermentación es donde un Ferment Light gana su complejidad aromática, y donde la mayoría de los cafés pierden la suya. La medimos en horas, grados y pH, no en conjeturas.",
+    "ar": "التخمير هو حيث يكتسب Ferment Light تعقيده العطري — وحيث تفقد معظم القهوات تعقيدها. نقيسه بالساعات والدرجات ودرجة الحموضة، لا بالتخمين."
+  },
+  "body": {
+    "en": [
+      "Once the fruit is removed, microorganisms begin converting the sugars of the mucilage into acids, alcohols and aromatic compounds. Left to ambient conditions, this runs hot and fast and ends in vinegar. Held in sealed tanks fitted with one-way valves, with the mass kept between 18 and 22 °C, the same process becomes slow, legible and repeatable.",
+      "We track two variables through the tank: time, from 48 to 96 hours depending on the lot and the profile we are developing, and pH, which begins near 5.5 and is brought down to an end-point of 3.8–4.2. Ending early leaves the coffee plain; ending late tips it into harshness. The end-point is chosen on the cupping table, and then the tank is opened only when the meter agrees.",
+      "The measurable reward is consistency: across our experimental micro-lots in Cauca and Huila, controlled fermentation has lifted cupping scores by one to one and a half points over the same coffees processed conventionally, with a stability of profile from lot to lot that a hospitality partner can build a menu on."
+    ],
+    "es": [
+      "Una vez retirada la pulpa, los microorganismos comienzan a convertir los azúcares del mucílago en ácidos, alcoholes y compuestos aromáticos. En condiciones ambientales, el proceso es caliente y rápido, y termina en vinagre. En tanques sellados con válvulas unidireccionales, con la masa entre 18 y 22 °C, ese mismo proceso se vuelve lento, legible y repetible.",
+      "Seguimos dos variables en el tanque: el tiempo, de 48 a 96 horas según el lote y el perfil que desarrollamos, y el pH, que parte cerca de 5,5 y se lleva a un punto final de 3,8–4,2. Terminar antes deja el café plano; terminar tarde lo lleva a la aspereza. El punto final se decide en la mesa de catación, y el tanque se abre solo cuando el medidor lo confirma.",
+      "La recompensa medible es la consistencia: en nuestros microlotes experimentales del Cauca y el Huila, la fermentación controlada ha elevado los puntajes de catación entre uno y uno y medio puntos frente a los mismos cafés procesados de forma convencional, con una estabilidad de perfil entre lotes sobre la que un socio hotelero puede construir una carta."
+    ]
+  },
+  "metrics": [
+    { "label": { "en": "Fermentation time", "es": "Tiempo de fermentación", "ar": "مدة التخمير" }, "value": "48–96", "unit": "h", "note": { "en": "sealed tank, one-way valve", "es": "tanque sellado, válvula unidireccional", "ar": "خزان مغلق بصمام أحادي" } },
+    { "label": { "en": "Mass temperature", "es": "Temperatura de la masa", "ar": "حرارة الكتلة" }, "value": "18–22", "unit": "°C", "note": { "en": "held throughout", "es": "mantenida en todo momento", "ar": "تُحفظ طوال الوقت" } },
+    { "label": { "en": "pH end-point", "es": "pH final", "ar": "درجة الحموضة النهائية" }, "value": "3.8–4.2", "unit": "pH", "note": { "en": "from ≈ 5.5 at start", "es": "desde ≈ 5,5 al inicio", "ar": "من ≈ 5.5 في البداية" } },
+    { "label": { "en": "Cupping gain", "es": "Ganancia en catación", "ar": "زيادة درجة التذوق" }, "value": "+1.0–1.5", "unit": "pts", "note": { "en": "vs. conventional process", "es": "frente al proceso convencional", "ar": "مقارنة بالمعالجة التقليدية" } }
+  ],
+  "sources": [
+    "Specialty Coffee Association — Cupping Protocols and Standards",
+    "Peer-reviewed literature on controlled (anaerobic) fermentation of Coffea arabica"
+  ]
+}

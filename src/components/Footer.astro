@@ -14,6 +14,7 @@ const { locale, path = '' } = Astro.props;
 const t = getDictionary(locale);
 const year = new Date().getFullYear();
 const dossierHref = `${localizePath(locale, 'inquire')}?interest=dossier`;
+const notesHref = localizePath(locale, 'insights');
 const privacyHref = localizePath(locale, 'privacy');
 ---
 
@@ -25,6 +26,8 @@ const privacyHref = localizePath(locale, 'privacy');
 
     <nav class="footer__links" aria-label={t.footer.dossier}>
       <a href={dossierHref} class="link footer__link">{t.footer.dossier}</a>
+      <span class="footer__sep" aria-hidden="true">·</span>
+      <a href={notesHref} class="link footer__link">{t.footer.notes}</a>
       <span class="footer__sep" aria-hidden="true">·</span>
       <a href={privacyHref} class="link footer__link">{t.footer.privacy}</a>
     </nav>

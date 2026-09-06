@@ -13,6 +13,10 @@ name: Deploy preview to GitHub Pages
 on:
   push:
     branches: [claude/eager-brown-CmDby, main]
+  # Monthly rebuild on the 1st (06:00 UTC): publishes any Field Note whose
+  # date has arrived (src/content/insights) without anyone touching the repo.
+  schedule:
+    - cron: '0 6 1 * *'
   workflow_dispatch:
 
 permissions:
@@ -75,3 +79,13 @@ jobs:
           # Keeps the custom domain across publishes (empty = none).
           cname: ${{ vars.PAGES_CNAME }}
           commit_message: 'Publish preview from ${{ github.sha }}'
+
+      # If production runs on Netlify, the same monthly schedule can trigger it:
+      # add a repository secret NETLIFY_BUILD_HOOK (Netlify → Site configuration →
+      # Build hooks) and it is called here. Silently skipped when unset.
+      - name: Trigger the Netlify production build (optional)
+        if: ${{ github.event_name == 'schedule' }}
+        env:
+          HOOK: ${{ secrets.NETLIFY_BUILD_HOOK }}
+        run: |
+          if [ -n "$HOOK" ]; then curl -fsS -X POST "$HOOK" >/dev/null && echo "Netlify build triggered"; else echo "no NETLIFY_BUILD_HOOK set — skipped"; fi

@@ -7,6 +7,7 @@
 // the top of the viewport and the next slides over it as you scroll — pure CSS.
 import Section from './Section.astro';
 import ScrollReveal from './ScrollReveal.astro';
+import Insights from './Insights.astro';
 import { getDictionary, localizePath, type Locale } from '../i18n';
 
 interface Props {
@@ -16,7 +17,7 @@ interface Props {
 const { locale } = Astro.props;
 const t = getDictionary(locale);
 const inquireHref = localizePath(locale, 'inquire');
-const TOTAL = '06';
+const TOTAL = '07';
 ---
 
 {/* Quiet "01 — 06" section index (desktop only; driven from BaseLayout). */}
@@ -80,8 +81,11 @@ const TOTAL = '06';
   }
 </div>
 
-{/* 03 — Bespoke Experience (non-interactive) */}
-<Section variant="light" label={t.bespoke.eyebrow} index="03">
+{/* 03 — Field Notes: this month's measured insight (auto-selected by date) */}
+<Insights locale={locale} index="03" />
+
+{/* 04 — Bespoke Experience (non-interactive) */}
+<Section variant="light" label={t.bespoke.eyebrow} index="04">
   <ScrollReveal mask={true} class="measure center">
     <p class="eyebrow">{t.bespoke.eyebrow}</p>
     <h2 class="block-title">{t.bespoke.title}</h2>
@@ -91,22 +95,22 @@ const TOTAL = '06';
   </ScrollReveal>
 </Section>
 
-{/* 04 — Hospitality Applications */}
+{/* 05 — Hospitality Applications */}
 <Section
   variant="image"
   image="/images/hospitality-interior.jpg"
   scrim="strong"
   full={true}
   label={t.hospitality.body.slice(0, 32)}
-  index="04"
+  index="05"
 >
   <ScrollReveal mask={true} class="measure center">
     <p class="statement statement--on-dark">{t.hospitality.body}</p>
   </ScrollReveal>
 </Section>
 
-{/* 05 — Partnership Philosophy */}
-<Section variant="light" label={t.philosophy.eyebrow} index="05">
+{/* 06 — Partnership Philosophy */}
+<Section variant="light" label={t.philosophy.eyebrow} index="06">
   <ScrollReveal mask={true} class="measure center">
     <p class="eyebrow">{t.philosophy.eyebrow}</p>
     <hr class="rule" />
@@ -114,8 +118,8 @@ const TOTAL = '06';
   </ScrollReveal>
 </Section>
 
-{/* 06 — Inquiry call */}
-<Section variant="dark" label={t.inquiryCall.cta} index="06">
+{/* 07 — Inquiry call */}
+<Section variant="dark" label={t.inquiryCall.cta} index="07">
   <ScrollReveal class="measure center">
     <p class="prose prose--muted-dark">{t.inquiryCall.line}</p>
     <a href={inquireHref} class="cta">{t.inquiryCall.cta}</a>
