@@ -1,8 +1,9 @@
 # Public preview on GitHub Pages — free, no account beyond GitHub itself.
 #
-# Builds the site under the /LATENTE base path and uses formsubmit.co for the
-# inquiry form (Netlify Forms only exist on Netlify). Production still deploys to
-# Netlify from netlify.toml with Netlify Forms at the root path.
+# Builds the site under the /LATENTE base path and publishes the static output
+# to the `gh-pages` branch, which GitHub Pages serves. The inquiry form uses
+# formsubmit.co here (Netlify Forms only exist on Netlify); production still
+# deploys to Netlify from netlify.toml with Netlify Forms at the root path.
 #
 # To receive inquiries from the preview, set a repository variable
 # INQUIRY_EMAIL (Settings → Secrets and variables → Actions → Variables); the
@@ -15,16 +16,14 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
   group: pages
   cancel-in-progress: true
 
 jobs:
-  build:
+  build-and-publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -37,12 +36,6 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Enable GitHub Pages for this repository (idempotent)
-        id: pages
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
-
       - name: Install dependencies
         run: npm install --no-audit --no-fund
 
@@ -53,24 +46,22 @@ jobs:
 
       - name: Build for the Pages sub-path
         env:
-          SITE_URL: ${{ steps.pages.outputs.origin }}
-          BASE_PATH: ${{ steps.pages.outputs.base_path }}
           PUBLIC_FORM_PROVIDER: formsubmit
           PUBLIC_INQUIRY_EMAIL: ${{ vars.INQUIRY_EMAIL }}
         run: |
-          echo "site=$SITE_URL base=${BASE_PATH:-/}"
+          owner="${GITHUB_REPOSITORY_OWNER,,}"
+          repo="${GITHUB_REPOSITORY#*/}"
+          export SITE_URL="https://${owner}.github.io"
+          export BASE_PATH="/${repo}"
+          echo "site=$SITE_URL base=$BASE_PATH"
           npm run build
+          # Pages must not run Jekyll over the Astro output (it drops _astro/).
+          touch dist/.nojekyll
 
-      - uses: actions/upload-pages-artifact@v3
+      - name: Publish dist to the gh-pages branch
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          path: dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          force_orphan: true
+          commit_message: 'Publish preview from ${{ github.sha }}'
