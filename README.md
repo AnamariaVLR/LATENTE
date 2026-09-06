@@ -134,7 +134,18 @@ private). Either:
   repos) — the intended production host, where Netlify Forms also work out of
   the box. See "Deploying to Netlify" above.
 
-**Preview URL:** `https://anamariavlr.github.io/LATENTE/`
+**Live URL:** `https://anamariavlr.github.io/LATENTE/`
+
+**Custom domain (optional).** `latente.com` is *not* available — it is parked by
+a domain reseller — so choose a domain you own (e.g. a `.coffee` or `.co`). Then:
+1. Add a repository variable **`PAGES_CNAME`** with the bare domain
+   (Settings → Secrets and variables → Actions → Variables). The workflow then
+   builds at the root path for that domain and writes the `CNAME` file on every
+   publish, so the setting survives redeploys.
+2. At your DNS provider, add a `CNAME` record for the domain (or `www`) pointing
+   to `anamariavlr.github.io`.
+3. Enter the same domain under Settings → Pages → *Custom domain* and enable
+   *Enforce HTTPS* once the certificate is issued (a few minutes).
 
 Netlify Forms only exist on Netlify, so the preview uses **formsubmit.co** —
 free, no account, works from any static host. To receive inquiries from the

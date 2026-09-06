@@ -48,11 +48,19 @@ jobs:
         env:
           PUBLIC_FORM_PROVIDER: formsubmit
           PUBLIC_INQUIRY_EMAIL: ${{ vars.INQUIRY_EMAIL }}
+          # Optional custom domain you OWN (repository variable PAGES_CNAME).
+          # When set, the site is built at the root path for that domain.
+          PAGES_CNAME: ${{ vars.PAGES_CNAME }}
         run: |
           owner="${GITHUB_REPOSITORY_OWNER,,}"
           repo="${GITHUB_REPOSITORY#*/}"
-          export SITE_URL="https://${owner}.github.io"
-          export BASE_PATH="/${repo}"
+          if [ -n "${PAGES_CNAME:-}" ]; then
+            export SITE_URL="https://${PAGES_CNAME}"
+            export BASE_PATH="/"
+          else
+            export SITE_URL="https://${owner}.github.io"
+            export BASE_PATH="/${repo}"
+          fi
           echo "site=$SITE_URL base=$BASE_PATH"
           npm run build
           # Pages must not run Jekyll over the Astro output (it drops _astro/).
@@ -64,4 +72,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
           force_orphan: true
+          # Keeps the custom domain across publishes (empty = none).
+          cname: ${{ vars.PAGES_CNAME }}
           commit_message: 'Publish preview from ${{ github.sha }}'
