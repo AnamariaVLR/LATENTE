@@ -114,12 +114,17 @@ The site ships with **no** tracking by default.
 
 ---
 
-## Public preview on GitHub Pages (free, already live)
+## Public preview on GitHub Pages (free)
 
-`.github/workflows/pages.yml` builds and publishes the site to **GitHub Pages**
-on every push — no extra account needed. The preview lives under the repository
-sub-path, so the build runs with `BASE_PATH=/LATENTE` and every internal link and
-asset is base-aware via `src/config.ts` (`withBase()`).
+`.github/workflows/pages.yml` builds the site on every push and publishes the
+static output to the **`gh-pages`** branch — no extra account needed. The preview
+lives under the repository sub-path, so the build runs with `BASE_PATH=/LATENTE`
+and every internal link and asset is base-aware via `src/config.ts` (`withBase()`).
+
+**One-time activation (repository admin, ~30 seconds):** GitHub only serves a
+branch once Pages is switched on. Go to **Settings → Pages → Build and
+deployment → Source: "Deploy from a branch"**, choose **`gh-pages`** and
+**`/ (root)`**, and Save. From then on every push republishes automatically.
 
 **Preview URL:** `https://anamariavlr.github.io/LATENTE/`
 
