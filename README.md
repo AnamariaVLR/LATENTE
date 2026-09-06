@@ -121,10 +121,18 @@ static output to the **`gh-pages`** branch — no extra account needed. The prev
 lives under the repository sub-path, so the build runs with `BASE_PATH=/LATENTE`
 and every internal link and asset is base-aware via `src/config.ts` (`withBase()`).
 
-**One-time activation (repository admin, ~30 seconds):** GitHub only serves a
-branch once Pages is switched on. Go to **Settings → Pages → Build and
-deployment → Source: "Deploy from a branch"**, choose **`gh-pages`** and
-**`/ (root)`**, and Save. From then on every push republishes automatically.
+**One-time activation (repository admin, ~1 minute).** Two facts govern this:
+GitHub only serves a branch once Pages is switched on, and on the **free plan
+Pages is available for public repositories only** (this repository is currently
+private). Either:
+
+- **Publish here (no accounts):** Settings → General → Danger Zone → *Change
+  repository visibility* → **Public**; then Settings → Pages → Build and
+  deployment → Source **"Deploy from a branch"** → **`gh-pages`** / **`/ (root)`**
+  → Save. Live about a minute later; every push republishes automatically.
+- **Keep the code private:** deploy to **Netlify** (free tier supports private
+  repos) — the intended production host, where Netlify Forms also work out of
+  the box. See "Deploying to Netlify" above.
 
 **Preview URL:** `https://anamariavlr.github.io/LATENTE/`
 
