@@ -1,0 +1,77 @@
+---
+// The /privacy page body. The copy is a clearly-labelled template that must be
+// reviewed by counsel before launch — it exists so the inquiry form's consent
+// checkbox has something real to link to.
+import Section from './Section.astro';
+import ScrollReveal from './ScrollReveal.astro';
+import { getDictionary, type Locale } from '../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = getDictionary(locale);
+const updated = new Date().toLocaleDateString(t.htmlLang, {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<Section variant="light" label={t.privacy.title}>
+  <ScrollReveal class="measure center privacy-head">
+    <p class="eyebrow">{t.privacy.eyebrow}</p>
+    <h1 class="privacy-title">{t.privacy.title}</h1>
+    <hr class="rule" />
+    <p class="privacy-updated">{t.privacy.updated.replace('{date}', updated)}</p>
+  </ScrollReveal>
+
+  <div class="measure privacy-body">
+    <p class="privacy-notice">{t.privacy.notice}</p>
+    {
+      t.privacy.sections.map((s) => (
+        <ScrollReveal class="privacy-section">
+          <h2 class="privacy-section__title">{s.title}</h2>
+          <p class="privacy-section__body">{s.body}</p>
+        </ScrollReveal>
+      ))
+    }
+  </div>
+</Section>
+
+<style>
+  .privacy-head {
+    margin-block-end: var(--space-2xl);
+  }
+  .privacy-title {
+    font-size: var(--step-2);
+    margin-block-start: var(--space-sm);
+  }
+  .privacy-updated {
+    margin-block-start: var(--space-md);
+    color: var(--stone);
+    font-size: var(--step--1);
+  }
+  .privacy-notice {
+    padding: var(--space-sm) var(--space-md);
+    border-inline-start: 2px solid var(--hairline);
+    color: var(--stone);
+    font-style: italic;
+    margin-block-end: var(--space-xl);
+  }
+  :global(html[dir='rtl']) .privacy-notice {
+    font-style: normal;
+  }
+  .privacy-section + .privacy-section {
+    margin-block-start: var(--space-xl);
+  }
+  .privacy-section__title {
+    font-size: var(--step-1);
+    letter-spacing: var(--track-display);
+    margin-block-end: var(--space-sm);
+  }
+  .privacy-section__body {
+    line-height: var(--leading-body);
+  }
+</style>

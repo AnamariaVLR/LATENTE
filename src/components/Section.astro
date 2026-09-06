@@ -1,7 +1,9 @@
 ---
 // A full-width page section with tall vertical rhythm and a constrained inner
 // container. Variants control the colour treatment; image-backed variants always
-// carry a gradient scrim so overlaid text stays AA-legible.
+// carry a gradient scrim so overlaid text stays AA-legible, plus a unified
+// colour grade so every photograph reads as one film stock.
+import { responsiveSources } from '../lib/images';
 
 interface Props {
   id?: string;
@@ -11,7 +13,7 @@ interface Props {
    * image  — full-bleed background image + scrim, ivory text
    */
   variant?: 'light' | 'dark' | 'image';
-  /** Background image URL (image variant only). */
+  /** Background image JPG path (image variant only); AVIF/WebP derived. */
   image?: string;
   /** Scrim strength for the image variant. */
   scrim?: 'soft' | 'strong';
@@ -21,6 +23,8 @@ interface Props {
   grain?: boolean;
   /** Accessible label for the section landmark. */
   label?: string;
+  /** Position shown in the homepage section index (e.g. "01"). */
+  index?: string;
   class?: string;
 }
 
@@ -32,18 +36,18 @@ const {
   full = false,
   grain = false,
   label,
+  index,
   class: className = '',
 } = Astro.props;
 
 const scrimVar = scrim === 'strong' ? 'var(--scrim-strong)' : 'var(--scrim-soft)';
-
-// Serve a modern .webp with the .jpg as fallback. The image prop is the .jpg path.
-const webp = image?.replace(/\.jpe?g$/i, '.webp');
+const src = image ? responsiveSources(image) : null;
 ---
 
 <section
   id={id}
   aria-label={label}
+  data-index={index}
   class:list={[
     'section',
     `section--${variant}`,
@@ -52,12 +56,20 @@ const webp = image?.replace(/\.jpe?g$/i, '.webp');
   ]}
 >
   {
-    variant === 'image' && image && (
+    variant === 'image' && src && (
       <div class="section__bg" aria-hidden="true">
         <picture>
-          {webp && <source srcset={webp} type="image/webp" />}
-          <img src={image} alt="" loading="lazy" decoding="async" class="section__img" />
+          {src.responsive ? (
+            <>
+              <source type="image/avif" srcset={src.avif} sizes="100vw" />
+              <source type="image/webp" srcset={src.webp} sizes="100vw" />
+            </>
+          ) : (
+            <source type="image/webp" srcset={src.webpSingle} />
+          )}
+          <img src={src.fallback} alt="" loading="lazy" decoding="async" class="section__img" />
         </picture>
+        <div class="section__grade"></div>
         <div class="section__scrim" style={`--s:${scrimVar}`}></div>
       </div>
     )
@@ -85,6 +97,12 @@ const webp = image?.replace(/\.jpe?g$/i, '.webp');
   .section--dark {
     background: var(--forest);
     color: var(--on-dark);
+  }
+  /* Text-only sections below the fold can skip layout until near the viewport. */
+  .section--light,
+  .section--dark {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 60svh;
   }
   .section--image {
     color: var(--on-dark);
@@ -119,6 +137,28 @@ const webp = image?.replace(/\.jpe?g$/i, '.webp');
     width: 100%;
     height: 100%;
     object-fit: cover;
+    filter: saturate(var(--grade-saturate)) contrast(var(--grade-contrast));
+  }
+  /* Scroll-linked depth: the photo drifts a little slower than the text. The
+     picture is oversized (scale) so the drift never reveals an edge. */
+  @supports (animation-timeline: view()) {
+    .section__bg picture {
+      animation: section-parallax linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+    }
+    @keyframes section-parallax {
+      from { transform: scale(1.14) translateY(-5%); }
+      to { transform: scale(1.14) translateY(5%); }
+    }
+  }
+  /* Unified colour cast: a forest tint blended into the photo's hue. */
+  .section__grade {
+    position: absolute;
+    inset: 0;
+    background: var(--grade-tint);
+    mix-blend-mode: color;
+    opacity: var(--grade-tint-opacity);
   }
   /* Vertical gradient: darkest where text sits (centre), so contrast holds AA. */
   .section__scrim {

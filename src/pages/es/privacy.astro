@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PrivacyContent from '../../components/PrivacyContent.astro';
+import { getDictionary } from '../../i18n';
+
+const locale = 'es' as const;
+const t = getDictionary(locale);
+---
+
+<BaseLayout
+  locale={locale}
+  path="privacy"
+  title={t.privacy.metaTitle}
+  description={t.privacy.metaDescription}
+  ogAlt={t.meta.ogAlt}
+  headerTone="solid"
+>
+  <PrivacyContent locale={locale} />
+</BaseLayout>

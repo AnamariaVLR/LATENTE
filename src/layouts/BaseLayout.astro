@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from 'astro:transitions';
 import SEO from '../components/SEO.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -46,17 +47,17 @@ const isArabic = locale === 'ar';
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
 
-    {/* Preload the fonts most likely to paint first to avoid layout shift. */}
+    {/* Preload the two variable fonts (they paint first) to avoid layout shift. */}
     <link
       rel="preload"
-      href="/fonts/cormorant-garamond-500-latin.woff2"
+      href="/fonts/cormorant-garamond-var-latin.woff2"
       as="font"
       type="font/woff2"
       crossorigin
     />
     <link
       rel="preload"
-      href="/fonts/eb-garamond-400-latin.woff2"
+      href="/fonts/eb-garamond-var-latin.woff2"
       as="font"
       type="font/woff2"
       crossorigin
@@ -74,6 +75,9 @@ const isArabic = locale === 'ar';
     }
 
     <SEO locale={locale} path={path} title={title} description={description} ogAlt={ogAlt} />
+
+    {/* Seamless client-side navigation with cross-fade page transitions. */}
+    <ClientRouter />
   </head>
 
   <body>
@@ -87,16 +91,22 @@ const isArabic = locale === 'ar';
 
     <Footer locale={locale} path={path} />
 
-    {/* Scroll-reveal: register one observer for all [data-reveal] elements.
-        Reduced-motion users get the content immediately (see global.css) — but we
-        also short-circuit here so nothing depends on the observer firing. */}
+    {/* Scroll-reveal fallback for browsers without CSS scroll-driven animations.
+        Where `animation-timeline: view()` is supported, the CSS in global.css
+        drives the reveal and this observer simply isn't needed. Re-runs after
+        every view transition (astro:page-load) and is idempotent. */}
     <script>
-      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const items = document.querySelectorAll('[data-reveal]');
+      function initReveal() {
+        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const native = CSS.supports('animation-timeline: view()');
+        const items = document.querySelectorAll<HTMLElement>('[data-reveal]:not([data-reveal-init])');
 
-      if (prefersReduced || !('IntersectionObserver' in window)) {
-        items.forEach((el) => el.classList.add('is-visible'));
-      } else {
+        items.forEach((el) => (el.dataset.revealInit = '1'));
+
+        if (prefersReduced || native || !('IntersectionObserver' in window)) {
+          items.forEach((el) => el.classList.add('is-visible'));
+          return;
+        }
         const io = new IntersectionObserver(
           (entries, obs) => {
             entries.forEach((entry) => {
@@ -110,6 +120,70 @@ const isArabic = locale === 'ar';
         );
         items.forEach((el) => io.observe(el));
       }
+      initReveal();
+      document.addEventListener('astro:page-load', initReveal);
+    </script>
+
+    {/* Restrained micro-interactions: a magnetic pull on primary buttons (fine
+        pointers only) and the homepage section index. Both idempotent and
+        re-bound after view transitions. */}
+    <script>
+      const fine = window.matchMedia('(pointer: fine)').matches;
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function initMagnetic() {
+        if (!fine || reduced) return;
+        document.querySelectorAll<HTMLElement>('.cta:not([data-magnetic])').forEach((el) => {
+          el.dataset.magnetic = '1';
+          el.addEventListener('pointermove', (e) => {
+            const r = el.getBoundingClientRect();
+            const dx = (e.clientX - (r.left + r.width / 2)) / r.width;
+            const dy = (e.clientY - (r.top + r.height / 2)) / r.height;
+            el.style.transform = `translate(${(dx * 10).toFixed(1)}px, ${(dy * 6).toFixed(1)}px)`;
+          });
+          el.addEventListener('pointerleave', () => {
+            el.style.transform = '';
+          });
+        });
+      }
+
+      function initIndex() {
+        const box = document.querySelector<HTMLElement>('.section-index');
+        if (!box || box.dataset.init) return;
+        box.dataset.init = '1';
+        const current = box.querySelector<HTMLElement>('[data-current]');
+        const targets = document.querySelectorAll<HTMLElement>('[data-index]');
+        if (!current || !targets.length || !('IntersectionObserver' in window)) return;
+
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((en) => {
+              if (en.isIntersecting && en.target instanceof HTMLElement) {
+                current.textContent = en.target.dataset.index ?? '';
+                box.classList.add('is-active');
+              }
+            });
+          },
+          { rootMargin: '-45% 0px -45% 0px' },
+        );
+        targets.forEach((t) => io.observe(t));
+
+        // Stay out of the way while the hero fills the screen.
+        const hero = document.querySelector('.hero');
+        if (hero) {
+          new IntersectionObserver(
+            ([en]) => box.classList.toggle('is-hidden', !!en && en.intersectionRatio > 0.35),
+            { threshold: [0, 0.35, 0.7] },
+          ).observe(hero);
+        }
+      }
+
+      function initAll() {
+        initMagnetic();
+        initIndex();
+      }
+      initAll();
+      document.addEventListener('astro:page-load', initAll);
     </script>
   </body>
 </html>

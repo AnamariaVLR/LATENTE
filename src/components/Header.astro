@@ -57,16 +57,21 @@ const onInquire = path === 'inquire';
 <script>
   // Hide the wordmark while the hero fills the screen; fade it (and the forest
   // band) in once the page has scrolled past most of the first viewport.
-  const header = document.querySelector('.header--over');
-  if (header) {
-    const update = () => {
-      const trigger = Math.min(window.innerHeight * 0.6, 520);
-      header.classList.toggle('is-top', window.scrollY < trigger);
-    };
+  // Re-binds after each view transition (the header element is replaced).
+  let bound: HTMLElement | null = null;
+  const update = () => {
+    if (!bound) return;
+    const trigger = Math.min(window.innerHeight * 0.6, 520);
+    bound.classList.toggle('is-top', window.scrollY < trigger);
+  };
+  function initHeader() {
+    bound = document.querySelector<HTMLElement>('.header--over');
     update();
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update, { passive: true });
   }
+  initHeader();
+  document.addEventListener('astro:page-load', initHeader);
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update, { passive: true });
 </script>
 
 <style>

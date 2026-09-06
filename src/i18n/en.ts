@@ -115,6 +115,7 @@ const en: Dictionary = {
   footer: {
     email: 'hello@latente.coffee',
     dossier: 'Request the full dossier',
+    privacy: 'Privacy',
     rights: 'LATENTE. All rights reserved.',
     languageLabel: 'Language',
   },
@@ -128,28 +129,88 @@ const en: Dictionary = {
     title: 'Request a Private Conversation',
     intro:
       'We work with a small number of partners at a time. Tell us a little about your property, and we will be in touch privately.',
+    groups: {
+      you: 'About you',
+      property: 'Your property',
+      conversation: 'The conversation',
+    },
     fields: {
       name: 'Name',
       company: 'Company / Property',
       role: 'Role',
       email: 'Email',
-      country: 'Country',
+      phone: 'Phone',
+      country: 'Country / City',
+      propertyType: 'Type of property',
+      propertyTypeDefault: 'Please select',
+      rooms: 'Number of properties or rooms',
       interest: 'Area of interest',
       interestDefault: 'Please select',
+      currentProgram: 'Current coffee program',
+      timeline: 'Timeline',
+      timelineDefault: 'Please select',
       message: 'Message',
     },
     interestOptions: {
       house: 'House Coffees',
       bespoke: 'Bespoke Program',
       partnership: 'Hospitality Partnership',
+      dossier: 'Request the full dossier',
+    },
+    propertyTypes: {
+      hotelGroup: 'Hotel group',
+      boutique: 'Boutique hotel',
+      restaurant: 'Restaurant',
+      club: 'Members club',
+      other: 'Other',
+    },
+    timelines: {
+      exploring: 'Exploring',
+      months: 'Within 3–6 months',
+      now: 'Ready now',
+    },
+    consent: {
+      before: 'I agree that LATENTE may store and use these details to respond to my inquiry, as described in the ',
+      privacyLink: 'privacy notice',
+      after: '.',
     },
     optionalLabel: 'optional',
     submit: 'Send Inquiry',
+    sending: 'Sending…',
+    error: 'Something went wrong. Please try again, or write to us directly.',
     success: {
       title: 'Thank you.',
       body: 'We will be in touch privately.',
       back: 'Return home',
     },
+  },
+
+  privacy: {
+    metaTitle: 'Privacy — LATENTE',
+    metaDescription: 'How LATENTE handles the details you share when you make an inquiry.',
+    eyebrow: 'Privacy Notice',
+    title: 'How we handle your details',
+    updated: 'Last updated: {date}',
+    notice:
+      'This notice is a starting template and must be reviewed by legal counsel before launch.',
+    sections: [
+      {
+        title: 'What we collect',
+        body: 'When you submit an inquiry we receive the details you enter — your name, role, company or property, contact details, and the message you write. We do not use tracking cookies.',
+      },
+      {
+        title: 'Why we use it',
+        body: 'Solely to respond to your inquiry and, where a conversation continues, to prepare a proposal. We do not sell or share your details with third parties for marketing.',
+      },
+      {
+        title: 'Where it is stored',
+        body: 'Submissions are delivered to our private inbox and held in our website host’s form service. We keep them only as long as needed to handle your inquiry and any resulting relationship.',
+      },
+      {
+        title: 'Your rights',
+        body: 'You may ask us at any time to see, correct, or delete the details we hold about you. Write to us at the address in the footer and we will act promptly.',
+      },
+    ],
   },
 };
 

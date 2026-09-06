@@ -1,8 +1,9 @@
 ---
-// Footer: wordmark, single email contact, language switcher, copyright. Nothing more.
+// Footer: wordmark, single email contact, the two quiet secondary paths (dossier
+// request → the inquiry form; privacy), language switcher, copyright.
 import Logo from './Logo.astro';
 import LanguageSwitcher from './LanguageSwitcher.astro';
-import { getDictionary, type Locale } from '../i18n';
+import { getDictionary, localizePath, type Locale } from '../i18n';
 
 interface Props {
   locale: Locale;
@@ -12,6 +13,8 @@ interface Props {
 const { locale, path = '' } = Astro.props;
 const t = getDictionary(locale);
 const year = new Date().getFullYear();
+const dossierHref = `${localizePath(locale, 'inquire')}?interest=dossier`;
+const privacyHref = localizePath(locale, 'privacy');
 ---
 
 <footer class="footer section--dark">
@@ -19,6 +22,12 @@ const year = new Date().getFullYear();
     <Logo label={t.hero.wordmarkAlt} size="sm" />
 
     <a href={`mailto:${t.footer.email}`} class="footer__email link">{t.footer.email}</a>
+
+    <nav class="footer__links" aria-label={t.footer.dossier}>
+      <a href={dossierHref} class="link footer__link">{t.footer.dossier}</a>
+      <span class="footer__sep" aria-hidden="true">·</span>
+      <a href={privacyHref} class="link footer__link">{t.footer.privacy}</a>
+    </nav>
 
     <LanguageSwitcher locale={locale} path={path} tone="dark" />
 
@@ -44,6 +53,19 @@ const year = new Date().getFullYear();
     text-transform: none;
     letter-spacing: 0.04em;
     font-size: var(--step-0);
+  }
+  .footer__links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: baseline;
+    gap: var(--space-sm);
+  }
+  .footer__link {
+    color: var(--on-dark);
+  }
+  .footer__sep {
+    opacity: 0.4;
   }
   .footer__rights {
     font-size: var(--step--1);

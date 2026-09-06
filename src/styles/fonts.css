@@ -1,49 +1,34 @@
 /* =============================================================================
    Self-hosted fonts. No hotlinking to Google Fonts (avoids layout shift and a
-   third-party request). To swap in the real brand font, replace the files in
-   /public/fonts and update the @font-face src below — nothing else changes.
+   third-party request).
 
-   Subsets downloaded: Cormorant Garamond (400/500/600, latin),
-   EB Garamond (400/500, latin), Amiri (400/700, latin + arabic for the AR locale).
+   Cormorant Garamond and EB Garamond ship as VARIABLE fonts (one file each,
+   full weight axis) subset to Latin with their real OpenType features kept —
+   true small caps (smcp/c2sc), old-style figures (onum) and ligatures — which
+   Google's own hosted subsets strip out. Amiri covers the Arabic locale.
+
+   To swap in a brand font: drop the files in /public/fonts, update the src and
+   weight range below, and the --font-* tokens. Nothing else changes.
    ============================================================================= */
 
 /* --- Cormorant Garamond — display / wordmark / section titles ------------- */
 @font-face {
   font-family: 'Cormorant Garamond';
   font-style: normal;
-  font-weight: 400;
+  font-weight: 300 700;
   font-display: swap;
-  src: url('/fonts/cormorant-garamond-400-latin.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Cormorant Garamond';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url('/fonts/cormorant-garamond-500-latin.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'Cormorant Garamond';
-  font-style: normal;
-  font-weight: 600;
-  font-display: swap;
-  src: url('/fonts/cormorant-garamond-600-latin.woff2') format('woff2');
+  src: url('/fonts/cormorant-garamond-var-latin.woff2') format('woff2-variations'),
+       url('/fonts/cormorant-garamond-var-latin.woff2') format('woff2');
 }
 
 /* --- EB Garamond — body --------------------------------------------------- */
 @font-face {
   font-family: 'EB Garamond';
   font-style: normal;
-  font-weight: 400;
+  font-weight: 400 800;
   font-display: swap;
-  src: url('/fonts/eb-garamond-400-latin.woff2') format('woff2');
-}
-@font-face {
-  font-family: 'EB Garamond';
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url('/fonts/eb-garamond-500-latin.woff2') format('woff2');
+  src: url('/fonts/eb-garamond-var-latin.woff2') format('woff2-variations'),
+       url('/fonts/eb-garamond-var-latin.woff2') format('woff2');
 }
 
 /* --- Amiri — Arabic (and latin fallback) for the AR locale ---------------- */

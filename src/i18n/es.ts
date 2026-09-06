@@ -119,6 +119,7 @@ const es: Dictionary = {
   footer: {
     email: 'hello@latente.coffee',
     dossier: 'Solicitar el dossier completo',
+    privacy: 'Privacidad',
     rights: 'LATENTE. Todos los derechos reservados.',
     languageLabel: 'Idioma',
   },
@@ -132,28 +133,88 @@ const es: Dictionary = {
     title: 'Solicitar una Conversación Privada',
     intro:
       'Trabajamos con un número reducido de socios a la vez. Cuéntenos un poco sobre su propiedad y nos pondremos en contacto de forma privada.',
+    groups: {
+      you: 'Sobre usted',
+      property: 'Su propiedad',
+      conversation: 'La conversación',
+    },
     fields: {
       name: 'Nombre',
       company: 'Empresa / Propiedad',
       role: 'Cargo',
       email: 'Correo electrónico',
-      country: 'País',
+      phone: 'Teléfono',
+      country: 'País / Ciudad',
+      propertyType: 'Tipo de propiedad',
+      propertyTypeDefault: 'Seleccione una opción',
+      rooms: 'Número de propiedades o habitaciones',
       interest: 'Área de interés',
       interestDefault: 'Seleccione una opción',
+      currentProgram: 'Programa de café actual',
+      timeline: 'Plazo',
+      timelineDefault: 'Seleccione una opción',
       message: 'Mensaje',
     },
     interestOptions: {
       house: 'Cafés de la Casa',
       bespoke: 'Programa a Medida',
       partnership: 'Asociación Hotelera',
+      dossier: 'Solicitar el dossier completo',
+    },
+    propertyTypes: {
+      hotelGroup: 'Grupo hotelero',
+      boutique: 'Hotel boutique',
+      restaurant: 'Restaurante',
+      club: 'Club privado',
+      other: 'Otro',
+    },
+    timelines: {
+      exploring: 'Explorando',
+      months: 'En 3–6 meses',
+      now: 'Listo para empezar',
+    },
+    consent: {
+      before: 'Acepto que LATENTE almacene y utilice estos datos para responder a mi consulta, según se describe en el ',
+      privacyLink: 'aviso de privacidad',
+      after: '.',
     },
     optionalLabel: 'opcional',
     submit: 'Enviar Consulta',
+    sending: 'Enviando…',
+    error: 'Algo salió mal. Inténtelo de nuevo o escríbanos directamente.',
     success: {
       title: 'Gracias.',
       body: 'Nos pondremos en contacto de forma privada.',
       back: 'Volver al inicio',
     },
+  },
+
+  privacy: {
+    metaTitle: 'Privacidad — LATENTE',
+    metaDescription: 'Cómo trata LATENTE los datos que comparte al realizar una consulta.',
+    eyebrow: 'Aviso de Privacidad',
+    title: 'Cómo tratamos sus datos',
+    updated: 'Última actualización: {date}',
+    notice:
+      'Este aviso es una plantilla inicial y debe ser revisado por un asesor legal antes del lanzamiento.',
+    sections: [
+      {
+        title: 'Qué recopilamos',
+        body: 'Al enviar una consulta recibimos los datos que usted introduce: nombre, cargo, empresa o propiedad, datos de contacto y el mensaje que escribe. No utilizamos cookies de seguimiento.',
+      },
+      {
+        title: 'Para qué los usamos',
+        body: 'Únicamente para responder a su consulta y, si la conversación continúa, para preparar una propuesta. No vendemos ni compartimos sus datos con terceros con fines de marketing.',
+      },
+      {
+        title: 'Dónde se almacenan',
+        body: 'Las consultas se entregan en nuestra bandeja privada y se conservan en el servicio de formularios de nuestro proveedor de alojamiento. Las guardamos solo el tiempo necesario para atender su consulta y la relación que pueda derivarse.',
+      },
+      {
+        title: 'Sus derechos',
+        body: 'Puede solicitarnos en cualquier momento ver, corregir o eliminar los datos que tenemos sobre usted. Escríbanos a la dirección del pie de página y actuaremos con prontitud.',
+      },
+    ],
   },
 };
 

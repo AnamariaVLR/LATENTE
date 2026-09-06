@@ -1,7 +1,10 @@
 ---
-// The long-scroll homepage: sections 2–9 (the hero is rendered separately).
+// The long-scroll homepage (the hero is rendered separately).
 // Composed from <Section> and <ScrollReveal>; all copy comes from the locale
 // dictionary so there are no hard-coded strings here.
+//
+// The three House Coffees form a "sticky stack": each full-screen panel pins to
+// the top of the viewport and the next slides over it as you scroll — pure CSS.
 import Section from './Section.astro';
 import ScrollReveal from './ScrollReveal.astro';
 import { getDictionary, localizePath, type Locale } from '../i18n';
@@ -13,10 +16,18 @@ interface Props {
 const { locale } = Astro.props;
 const t = getDictionary(locale);
 const inquireHref = localizePath(locale, 'inquire');
+const TOTAL = '06';
 ---
 
-{/* The Signature Coffee Program: three numbered movements */}
-<Section variant="dark" label={t.program.eyebrow}>
+{/* Quiet "01 — 06" section index (desktop only; driven from BaseLayout). */}
+<div class="section-index" aria-hidden="true">
+  <span data-current>01</span>
+  <span class="section-index__sep">—</span>
+  <span>{TOTAL}</span>
+</div>
+
+{/* 01 — The Signature Coffee Program: three numbered movements */}
+<Section variant="dark" label={t.program.eyebrow} index="01">
   <ScrollReveal class="center block-head">
     <p class="eyebrow">{t.program.eyebrow}</p>
     <hr class="rule" />
@@ -35,39 +46,43 @@ const inquireHref = localizePath(locale, 'inquire');
   </ol>
 </Section>
 
-{/* 5 — The House Coffees: three full-bleed editions, each its own panel */}
-<Section variant="light" label={t.houseCoffees.eyebrow} class="editions-intro">
+{/* 02 — The House Coffees: a lead-in label, then the sticky stack of editions */}
+<Section variant="light" label={t.houseCoffees.eyebrow} class="editions-intro" index="02">
   <ScrollReveal class="center">
     <p class="eyebrow">{t.houseCoffees.eyebrow}</p>
     <hr class="rule" />
   </ScrollReveal>
 </Section>
 
-{
-  t.houseCoffees.editions.map((ed) => (
-    <Section
-      variant="image"
-      image={ed.image}
-      scrim="strong"
-      full={true}
-      grain={true}
-      label={`${ed.no} — ${ed.name}`}
-    >
-      <ScrollReveal class="measure center edition">
-        <p class="edition__no">{ed.no}</p>
-        <h2 class="edition__name">{ed.name}</h2>
-        <hr class="rule" />
-        {ed.lines.map((line) => (
-          <p class="edition__line">{line}</p>
-        ))}
-      </ScrollReveal>
-    </Section>
-  ))
-}
+<div class="editions-stack">
+  {
+    t.houseCoffees.editions.map((ed) => (
+      <Section
+        variant="image"
+        image={ed.image}
+        scrim="strong"
+        full={true}
+        grain={true}
+        label={`${ed.no} — ${ed.name}`}
+        index="02"
+        class="edition-panel"
+      >
+        <ScrollReveal mask={true} class="measure center edition">
+          <p class="edition__no">{ed.no}</p>
+          <h2 class="edition__name">{ed.name}</h2>
+          <hr class="rule" />
+          {ed.lines.map((line) => (
+            <p class="edition__line">{line}</p>
+          ))}
+        </ScrollReveal>
+      </Section>
+    ))
+  }
+</div>
 
-{/* 6 — Bespoke Experience (non-interactive) */}
-<Section variant="light" label={t.bespoke.eyebrow}>
-  <ScrollReveal class="measure center">
+{/* 03 — Bespoke Experience (non-interactive) */}
+<Section variant="light" label={t.bespoke.eyebrow} index="03">
+  <ScrollReveal mask={true} class="measure center">
     <p class="eyebrow">{t.bespoke.eyebrow}</p>
     <h2 class="block-title">{t.bespoke.title}</h2>
     <hr class="rule" />
@@ -76,30 +91,31 @@ const inquireHref = localizePath(locale, 'inquire');
   </ScrollReveal>
 </Section>
 
-{/* 7 — Hospitality Applications */}
+{/* 04 — Hospitality Applications */}
 <Section
   variant="image"
   image="/images/hospitality-interior.jpg"
   scrim="strong"
   full={true}
   label={t.hospitality.body.slice(0, 32)}
+  index="04"
 >
-  <ScrollReveal class="measure center">
+  <ScrollReveal mask={true} class="measure center">
     <p class="statement statement--on-dark">{t.hospitality.body}</p>
   </ScrollReveal>
 </Section>
 
-{/* 8 — Partnership Philosophy */}
-<Section variant="light" label={t.philosophy.eyebrow}>
-  <ScrollReveal class="measure center">
+{/* 05 — Partnership Philosophy */}
+<Section variant="light" label={t.philosophy.eyebrow} index="05">
+  <ScrollReveal mask={true} class="measure center">
     <p class="eyebrow">{t.philosophy.eyebrow}</p>
     <hr class="rule" />
     <p class="statement">{t.philosophy.body}</p>
   </ScrollReveal>
 </Section>
 
-{/* 9 — Inquiry call */}
-<Section variant="dark" label={t.inquiryCall.cta}>
+{/* 06 — Inquiry call */}
+<Section variant="dark" label={t.inquiryCall.cta} index="06">
   <ScrollReveal class="measure center">
     <p class="prose prose--muted-dark">{t.inquiryCall.line}</p>
     <a href={inquireHref} class="cta">{t.inquiryCall.cta}</a>
@@ -107,6 +123,10 @@ const inquireHref = localizePath(locale, 'inquire');
 </Section>
 
 <style>
+  .section-index__sep {
+    opacity: 0.5;
+  }
+
   /* Large, quiet statement type — the dominant voice of the page. */
   .statement {
     font-family: var(--font-display);
@@ -173,7 +193,19 @@ const inquireHref = localizePath(locale, 'inquire');
     line-height: var(--leading-body);
   }
 
-  /* --- Editions --- */
+  /* --- Editions: sticky stack --- */
+  .editions-stack {
+    /* Sticky children need an ancestor without overflow clipping — this
+       wrapper deliberately sets none. */
+    position: relative;
+  }
+  .editions-stack :global(.edition-panel) {
+    position: sticky;
+    inset-block-start: 0;
+    /* A hairline between stacked panels reads as a page edge sliding over. */
+    box-shadow: 0 -1px 0 color-mix(in srgb, var(--on-dark) 12%, transparent);
+  }
+
   .edition {
     display: flex;
     flex-direction: column;
@@ -181,13 +213,20 @@ const inquireHref = localizePath(locale, 'inquire');
     gap: var(--space-sm);
   }
   .edition__no {
-    font-size: var(--step--1);
-    letter-spacing: var(--track-eyebrow);
-    text-transform: uppercase;
+    font-size: var(--step-0);
+    /* True small caps, matching the eyebrows. */
+    font-variant-caps: small-caps;
+    font-feature-settings: 'smcp' 1, 'c2sc' 1;
+    letter-spacing: 0.12em;
     /* Ivory keeps this small label above AA over varied photography
        (muted brass would drop below 4.5:1 against lighter image areas). */
     color: var(--on-dark);
     opacity: 0.85;
+  }
+  :global(html[dir='rtl']) .edition__no {
+    font-variant-caps: normal;
+    font-feature-settings: normal;
+    letter-spacing: normal;
   }
   .edition__name {
     font-size: var(--step-3);
@@ -221,7 +260,11 @@ const inquireHref = localizePath(locale, 'inquire');
     text-decoration: none;
     color: var(--on-dark);
     border: 1px solid var(--hairline);
-    transition: background-color 320ms ease, color 320ms ease, border-color 320ms ease;
+    transition:
+      background-color 320ms ease,
+      color 320ms ease,
+      border-color 320ms ease,
+      transform 500ms var(--reveal-ease);
   }
   .cta:hover {
     background: var(--gold);

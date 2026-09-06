@@ -1,22 +1,27 @@
 ---
-// Scroll-reveal wrapper: fades + lifts its contents into view once.
-// The actual observer is registered once globally (see BaseLayout). This just
-// marks the element and sets an optional stagger delay. Fully neutralised under
-// `prefers-reduced-motion: reduce` via the [data-reveal] rules in global.css.
+// Scroll-reveal wrapper. Two treatments:
+//   • default — fade + gentle lift
+//   • mask    — an editorial wipe: the block is clipped and rises into view
+//
+// Where the browser supports CSS scroll-driven animations the reveal is linked
+// to scroll position (see global.css); elsewhere a small IntersectionObserver in
+// BaseLayout adds `.is-visible`. Fully neutralised under prefers-reduced-motion.
 
 interface Props {
   /** Stagger index — multiplies a small delay so grouped items cascade in. */
   delay?: number;
+  /** Use the clipped "wipe" reveal instead of the plain fade. */
+  mask?: boolean;
   /** Element tag to render. */
   as?: string;
   class?: string;
 }
 
-const { delay = 0, as = 'div', class: className = '' } = Astro.props;
+const { delay = 0, mask = false, as = 'div', class: className = '' } = Astro.props;
 const Tag = as as any;
 const style = delay ? `transition-delay:${delay * 110}ms` : undefined;
 ---
 
-<Tag data-reveal class={className} style={style}>
+<Tag data-reveal={mask ? 'mask' : ''} class={className} style={style}>
   <slot />
 </Tag>

@@ -3,10 +3,13 @@
 An inquiry-only brand website for **LATENTE** — a Colombian specialty coffee house
 that designs bespoke coffee programs for refined hospitality. B2B, no e-commerce,
 no prices. The site conveys the level of the brand and funnels a small number of
-high-value prospects into a private email inquiry.
+high-value prospects into a private inquiry — **the inquiry form is the checkout.**
 
-Built with **Astro** (static output), hand-written CSS design tokens, self-hosted
-fonts, full **i18n** (EN · ES · AR with RTL), and **Netlify Forms** for the inquiry.
+Built with **Astro** (static), hand-written CSS design tokens, self-hosted variable
+fonts with real OpenType features, responsive AVIF/WebP imagery, native
+scroll-driven motion, view transitions, full **i18n** (EN · ES · AR with RTL), and
+**Netlify Forms** for the inquiry. **Everything runs on free tiers** — there is no
+paid service anywhere in the stack.
 
 ---
 
@@ -17,6 +20,8 @@ npm install      # install dependencies
 npm run dev      # local dev server at http://localhost:4321
 npm run build    # production build to ./dist
 npm run preview  # serve the production build locally
+npm run images   # regenerate responsive AVIF/WebP variants (after adding photos)
+npm run fonts    # rebuild the variable font subsets (needs: pip install fonttools brotli)
 ```
 
 Node 22+ is recommended (see `netlify.toml`).
@@ -27,133 +32,170 @@ Node 22+ is recommended (see `netlify.toml`).
 
 ```
 public/
-  fonts/            self-hosted woff2 (Cormorant Garamond, EB Garamond, Amiri)
-  images/           placeholder photography (REPLACE before launch — see below)
-  favicon.svg       placeholder palm-tree mark
-  logo.svg          placeholder wordmark (swapped in via Logo.astro)
-  og-image.jpg      generated social card
-  robots.txt, site.webmanifest, icon-*.png, apple-touch-icon.png
+  fonts/            self-hosted woff2 — Cormorant Garamond + EB Garamond (variable,
+                    with smcp/onum/liga kept) and Amiri (Arabic)
+  images/           photography: name.jpg (fallback) + name-{720,1280,1920,2400}.{avif,webp}
+  favicon.svg       placeholder palm-tree mark   ·  logo.svg  placeholder wordmark
+  og-image.jpg, robots.txt, site.webmanifest, icon-*.png, apple-touch-icon.png
+scripts/
+  images.mjs        responsive image pipeline (sharp)  ·  fonts.sh  font subsetting
 src/
-  i18n/             locale dictionaries (en.ts, es.ts, ar.ts) + helpers + types
+  i18n/             locale dictionaries (en.ts, es.ts, ar.ts) + helpers + typed shape
+  lib/images.ts     build-time helper that discovers image variants for <picture>
   styles/           tokens.css · fonts.css · global.css
-  components/        Logo, LanguageSwitcher, ScrollReveal, Section, Header,
-                     Footer, SEO, Hero, Home, InquiryForm, InquireContent
-  layouts/          BaseLayout.astro (html shell, head, fonts, reveal observer)
-  pages/            index.astro (→ /en) and en|es|ar / index + inquire
-astro.config.mjs    i18n routing + sitemap
-netlify.toml        build, headers, redirect
+  components/       Logo, LanguageSwitcher, ScrollReveal, Section, Header, Footer,
+                    SEO, Hero, Home, InquiryForm, InquireContent, PrivacyContent
+  layouts/          BaseLayout.astro (shell, head, view transitions, motion scripts)
+  pages/            index.astro (→ /en) and en|es|ar / index · inquire · privacy
+astro.config.mjs    i18n routing + sitemap     ·     netlify.toml  build, headers, redirect
 ```
 
 There are **no hard-coded UI strings** in components — every string lives in the
-locale dictionaries under `src/i18n/`.
+locale dictionaries under `src/i18n/`, typed by `types.ts` (a missing key is a
+build error).
 
 ---
 
-## Deploying to Netlify
+## The inquiry engine (B2B lead capture) — free
 
-1. Push this repo to GitHub/GitLab and "Add new site → Import an existing project"
-   in Netlify, or run `netlify deploy` with the CLI.
-2. Netlify reads `netlify.toml` automatically:
-   - build command `npm run build`, publish directory `dist`
-   - long-cache headers for `/fonts` and `/images`
-   - `/` → `/en/` redirect
+The form on `/inquire` is wired to **Netlify Forms** (free tier: 100 submissions /
+month — ample for a private B2B funnel). No server code.
+
+**Fields** are grouped calmly into *About you · Your property · The conversation*:
+name, role, email, phone, company/property, property type, country/city, number
+of properties or rooms, area of interest (House Coffees · Bespoke Program ·
+Hospitality Partnership · Request the full dossier), current coffee program,
+timeline, message, and a **GDPR-style consent checkbox** linking to `/privacy`.
+Only the essentials are required; the rest qualify the lead without friction.
+
+**Entry points:** header, hero, Bespoke, closing call, footer, plus a
+"Request the full dossier" link that opens the form with that interest
+pre-selected (`/inquire?interest=dossier` — any option value works).
+
+**Spam:** a hidden honeypot (`bot-field`) plus Netlify's built-in filtering.
+
+### Route submissions to email (`INQUIRY_EMAIL`)
+
+1. Deploy once, then submit a test entry so Netlify registers the `inquiry` form.
+2. In Netlify: **Forms → inquiry → Settings & notifications → Add notification →
+   Email notification** → enter the corporate address. This is the address the
+   project refers to as **`INQUIRY_EMAIL`** — configured entirely in the Netlify
+   UI, nothing in code.
+3. Submissions also remain viewable in the Netlify Forms dashboard.
+
+### Free auto-reply to the prospect (optional)
+
+Netlify notifies *you*; to also send the prospect a confirmation for free, use
+Netlify's **Outgoing webhook** notification (Forms → notifications) pointing at a
+free **Zapier** (100 tasks/mo) or **Make** (1,000 ops/mo) scenario that sends a
+Gmail/Outlook email. The inline "Thank you — we will be in touch privately" state
+already confirms receipt on the page, so this is a nicety, not a requirement.
+
+### Analytics hook (optional, free)
+
+On a successful submit the page dispatches `document` event **`latente:inquiry`**
+(`detail.interest` carries the selected option). Any provider can listen for it.
+For cookieless, banner-free, free analytics, **Cloudflare Web Analytics** is a
+good fit — add its beacon `<script>` to `BaseLayout.astro` and forward the event.
+The site ships with **no** tracking by default.
+
+---
+
+## Deploying to Netlify (free)
+
+1. Push to GitHub and "Add new site → Import an existing project" in Netlify.
+2. `netlify.toml` provides the build command (`npm run assets && npm run build` —
+   derived AVIF/WebP and font subsets regenerate if missing), publish dir,
+   long-cache headers for fonts/images, security headers, and the `/ → /en/`
+   redirect.
 3. Set the production domain, then update **`site`** in `astro.config.mjs` and the
-   `Sitemap:` line in `public/robots.txt` to the live URL (used for canonical,
-   hreflang, sitemap and Open Graph URLs).
-
-### Routing inquiry form submissions to email (`INQUIRY_EMAIL`)
-
-The inquiry form uses **Netlify Forms** — no server code. Netlify auto-detects the
-form named `inquiry` from the static HTML at deploy time.
-
-To deliver submissions to the corporate inbox:
-
-1. Deploy once so Netlify registers the `inquiry` form (submit a test entry).
-2. In the Netlify dashboard: **Forms → inquiry → Settings & notifications →
-   Add notification → Email notification**.
-3. Set the recipient to the corporate address. This address is referred to as
-   **`INQUIRY_EMAIL`** throughout this project — there is no secret to configure in
-   code; it is set entirely in the Netlify UI.
-4. (Recommended) Enable Netlify's spam filtering; a hidden honeypot field
-   (`bot-field`) is already in place as a first line of defence.
-
-Submissions also remain viewable in the Netlify Forms dashboard. With JavaScript
-enabled the form submits via `fetch` and shows an inline thank-you; without JS it
-posts natively and Netlify shows its default success page.
+   `Sitemap:` line in `public/robots.txt` (used for canonical, hreflang, sitemap
+   and Open Graph URLs).
 
 ---
 
-## Customising via tokens
+## Design system & customisation
 
 Everything visual is centralised — swapping these re-skins the whole site.
 
-- **Colours & type scale & motion:** `src/styles/tokens.css` (CSS custom properties).
-- **Fonts:** `src/styles/fonts.css`. To use the real brand font, drop the woff2
-  files into `public/fonts/` and update the `@font-face` `src` paths + the
-  `--font-display` / `--font-body` token values. Fonts are self-hosted (never
-  hotlinked) and the two most critical faces are preloaded in `BaseLayout.astro`.
+- **Colours, type scale, spacing, motion, photo grade:** `src/styles/tokens.css`.
+  The `--grade-*` tokens apply one "film stock" (gentle desaturation + a forest
+  colour cast) to every photograph so the set reads as art-directed.
+- **Typography:** true **small caps** (`smcp`) for eyebrows and labels, old-style
+  figures in running text, lining figures in headings/forms — all from the
+  fonts' own OpenType tables (`global.css`).
+- **Fonts:** `src/styles/fonts.css`. Both Garamonds are single **variable** files
+  subset via `scripts/fonts.sh`. To use a brand font, drop the woff2 into
+  `public/fonts/`, update the `@font-face` and the `--font-*` tokens.
 - **Logo:** replace `public/logo.svg` with the real wordmark (the brand mark places
-  a palm tree in the "T"), then set `useSvg = true` in
-  `src/components/Logo.astro`. The favicon set is generated from
-  `public/favicon.svg` — regenerate the PNGs with sharp if you change it.
+  a palm tree in the "T"), then set `useSvg = true` in `Logo.astro`.
 
----
+### Motion (2026-grade, all free, all reduced-motion safe)
 
-## Site imagery
+- **Scroll-linked reveals** via native CSS `animation-timeline: view()` — text
+  resolves *as you scroll*, off the main thread. Browsers without support fall
+  back to a small IntersectionObserver. Two treatments: a fade-lift and an
+  editorial **mask wipe** (`<ScrollReveal mask />`).
+- **Parallax depth** on every photo section and the hero.
+- **View transitions** between pages/locales (`<ClientRouter />`).
+- **Sticky-stack editions**: each House Coffee pins and the next slides over it.
+- **Magnetic** primary buttons (fine pointers only) and a quiet **section index**.
+- Header wordmark hidden over the hero, rising in with a forest band on scroll.
 
-Each image-backed section is served as a `<picture>` with a modern **`.webp`**
-source and a **`.jpg`** fallback. Provide both formats for every image, keeping the
-same base filename (the `.webp` path is derived automatically from the `.jpg`
-path). Section paths live in the locale dictionaries (`editions[].image`) and in
-`Hero.astro` / `Home.astro`.
+### Imagery
 
-| Base filename              | Used in                          | Recommended size | Treatment |
-|----------------------------|----------------------------------|------------------|-----------|
-| `hero-cocora-valley`       | Hero                             | 2400×1600        | Misty Cocora Valley wax palms; muted/desaturated |
-| `essence-coffee-blossom`   | Essence **and** No. 01 The High Bloom | 2000×1333   | Coffee blossoms, soft light |
-| `coffee-02-cacao-ground`   | No. 02 The Cacao Ground          | 2000×1333        | Dark, cacao-toned foliage |
-| `coffee-03-ferment-light`  | No. 03 The Ferment Light         | 2000×1333        | Ripe coffee cherries, warm |
-| `hospitality-interior`     | Hospitality                      | 2400×1600        | Refined interior, warm muted light |
-| `og-image.jpg`             | Social share card                | 1200×630         | Branded card (regenerate or replace) |
+Each image section is a `<picture>` with **AVIF → WebP → JPG** sources at
+720/1280/1920/2400 widths (`sizes="100vw"`), discovered automatically at build.
 
-> The licensed photography is already in place. `essence-coffee-blossom` is reused
-> for both the Essence section and the No. 01 (The High Bloom) edition.
+| Base filename              | Used in                          | Source size |
+|----------------------------|----------------------------------|-------------|
+| `hero-cocora-valley`       | Hero                             | 2400×1602   |
+| `essence-coffee-blossom`   | No. 01 The High Bloom            | 2000×1200   |
+| `coffee-02-cacao-ground`   | No. 02 The Cacao Ground          | 2000×1333   |
+| `coffee-03-ferment-light`  | No. 03 The Ferment Light         | 2000×1335   |
+| `hospitality-interior`     | Hospitality                      | 2000×1333   |
 
-Every image-backed text section applies a gradient **scrim** so overlaid text stays
-above WCAG AA contrast. To add a new image section, drop in `name.webp` + `name.jpg`
-and point the section at `name.jpg`. The markup already uses `loading="lazy"` and
-`decoding="async"` (the hero uses `fetchpriority="high"`).
+To add or replace a photo: put `name.jpg` in `public/images/`, run
+`npm run images`, reference `/images/name.jpg`. Every image section keeps a
+gradient **scrim** so overlaid text stays above WCAG AA.
+
+**Cinemagraph hero (optional):** drop `hero-cocora-valley.mp4` and/or `.webm`
+(6–10 s, silent, ~1920×1080, H.264/VP9, ≤ 3 MB) into `public/images/` and the
+hero becomes a looping video automatically, using the still as poster and
+falling back to it under `prefers-reduced-motion`. Free tools: HandBrake or
+`ffmpeg -an -t 8 -vf scale=1920:-2 -crf 26`.
 
 ---
 
 ## Completing the translations
 
-Copy lives in `src/i18n/{en,es,ar}.ts`, all sharing the typed shape in `types.ts`
-(a missing or misnamed key is a build error).
+Copy lives in `src/i18n/{en,es,ar}.ts`, all sharing the typed shape in `types.ts`.
 
 - **English (`en.ts`)** — canonical, final copy.
-- **Spanish (`es.ts`)** — a faithful **draft**. The owner (native speaker) should
-  review and refine before launch.
+- **Spanish (`es.ts`)** — a faithful **draft**; the owner (native speaker) should
+  review before launch.
 - **Arabic (`ar.ts`)** — ⚠ **PLACEHOLDER, machine-quality draft.** The locale is
-  fully scaffolded with **RTL** support (`dir="rtl"`, mirrored layout via CSS
-  logical properties, the Amiri Arabic serif). **Every Arabic string must be
-  professionally translated and reviewed by a native copywriter before launch.**
-  Confirm whether brand names (LATENTE, the three edition names) should be
-  transliterated or kept in Latin script.
-
-To add or rename a string: update `types.ts`, then fill the key in all three
-dictionaries.
+  fully scaffolded with **RTL** support (logical CSS properties, the Amiri serif,
+  no letter-spacing/italics/small-caps on Arabic script). **Every string must be
+  professionally translated before launch.** Confirm whether LATENTE and the
+  edition names should be transliterated.
 
 ---
 
-## Accessibility & performance notes
+## Launch checklist
 
-- Semantic HTML5, single `<h1>` per page, labelled landmarks, skip link.
-- Visible focus states; AA-minimum contrast (text over imagery always scrimmed).
-- Scroll-reveal motion fully respects `prefers-reduced-motion: reduce`.
-- Self-hosted, preloaded fonts (`font-display: swap`) to minimise layout shift.
-- Lazy-loaded images; static output; minimal JS (one IntersectionObserver + the
-  form's progressive-enhancement submit).
+- [ ] Netlify email notification set to `INQUIRY_EMAIL`; test submission received
+- [ ] `/privacy` copy reviewed by counsel (it is a clearly-marked template)
+- [ ] Spanish copy reviewed; Arabic professionally translated
+- [ ] Real logo SVG and (if any) brand fonts dropped into the token slots
+- [ ] Production domain set in `astro.config.mjs` + `robots.txt`
+- [ ] Optional: cinemagraph video, cookieless analytics
+- [ ] Lighthouse 95+ and a WCAG AA pass on the production URL
 
-Run Lighthouse against the production build (`npm run build && npm run preview`)
-and iterate; target 95+ across the board.
+## Accessibility & performance
+
+Semantic HTML5, one `<h1>` per page, labelled landmarks, skip link, visible focus,
+AA contrast everywhere (photos scrimmed; gold reserved for rules and large
+numerals), full `prefers-reduced-motion` parity, self-hosted preloaded fonts,
+AVIF/WebP with `srcset`, lazy loading, `content-visibility` on below-fold text
+sections, static output, minimal JS.

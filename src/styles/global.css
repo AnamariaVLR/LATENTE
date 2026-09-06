@@ -30,6 +30,21 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Book-quality OpenType: ligatures, kerning and old-style figures sit
+     naturally in running text (the subset fonts keep these features). */
+  font-kerning: normal;
+  font-variant-ligatures: common-ligatures;
+  font-variant-numeric: oldstyle-nums proportional-nums;
+}
+
+/* Display type and form fields want lining figures so numerals align. */
+h1,
+h2,
+h3,
+input,
+select,
+textarea {
+  font-variant-numeric: lining-nums;
 }
 
 img,
@@ -139,9 +154,12 @@ p {
  * Eyebrow text uses a muted ink on light and ivory on dark instead.             */
 .eyebrow {
   font-family: var(--font-body);
-  font-size: var(--step--1);
-  letter-spacing: var(--track-eyebrow);
-  text-transform: uppercase;
+  font-size: var(--step-0);
+  /* TRUE small caps from the font's smcp feature — more refined than faux
+     uppercase, and it needs far less tracking to read as a label. */
+  font-variant-caps: small-caps;
+  font-feature-settings: 'smcp' 1, 'c2sc' 1;
+  letter-spacing: 0.12em;
   color: var(--stone);
 }
 .section--dark .eyebrow,
@@ -211,22 +229,109 @@ html[dir='rtl'] {
   --track-display: normal;
   --track-eyebrow: normal;
 }
+/* Arabic has no small-cap form; let the eyebrow fall back to plain text. */
+html[dir='rtl'] .eyebrow {
+  font-variant-caps: normal;
+  font-feature-settings: normal;
+  letter-spacing: normal;
+}
 html[dir='rtl'] .statement {
   letter-spacing: normal;
 }
 
-/* --- Scroll-reveal motion ------------------------------------------------- */
+/* --- Scroll-reveal motion ------------------------------------------------- *
+ * Fallback path (no scroll-driven animation support): elements start hidden and
+ * an IntersectionObserver adds .is-visible — a plain fade + lift, or for
+ * [data-reveal="mask"] an editorial wipe where the block is clipped and rises. */
 [data-reveal] {
   opacity: 0;
   transform: translateY(var(--reveal-shift));
   transition:
     opacity var(--reveal-duration) var(--reveal-ease),
-    transform var(--reveal-duration) var(--reveal-ease);
+    transform var(--reveal-duration) var(--reveal-ease),
+    clip-path calc(var(--reveal-duration) * 1.3) var(--reveal-ease);
   will-change: opacity, transform;
+}
+[data-reveal='mask'] {
+  clip-path: inset(0 0 100% 0);
+  transform: translateY(calc(var(--reveal-shift) * 1.5));
 }
 [data-reveal].is-visible {
   opacity: 1;
   transform: none;
+  clip-path: inset(0 0 0 0);
+}
+
+/* Native path: the reveal is LINKED to scroll position rather than triggered,
+   runs off the main thread, and needs no JS. Progress runs from the moment the
+   element enters the viewport until it is ~35% of the way in. */
+@supports (animation-timeline: view()) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    clip-path: none;
+    transition: none;
+    animation: reveal-lift linear both;
+    animation-timeline: view();
+    animation-range: entry 5% entry 35%;
+  }
+  [data-reveal='mask'] {
+    animation-name: reveal-wipe;
+    animation-range: entry 5% entry 45%;
+  }
+  @keyframes reveal-lift {
+    from {
+      opacity: 0;
+      transform: translateY(var(--reveal-shift));
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes reveal-wipe {
+    from {
+      opacity: 0;
+      clip-path: inset(0 0 100% 0);
+      transform: translateY(calc(var(--reveal-shift) * 1.5));
+    }
+    to {
+      opacity: 1;
+      clip-path: inset(0 0 0 0);
+      transform: none;
+    }
+  }
+}
+
+/* --- Section index (homepage): a quiet "01 — 06" that tracks the section. --- */
+.section-index {
+  position: fixed;
+  inset-block-end: var(--space-lg);
+  inset-inline-start: var(--gutter);
+  z-index: 15;
+  display: flex;
+  gap: 0.6em;
+  font-family: var(--font-body);
+  font-variant-numeric: lining-nums tabular-nums;
+  font-size: var(--step--1);
+  letter-spacing: 0.18em;
+  color: #fff;
+  /* Difference blending keeps it legible over ivory and forest alike. */
+  mix-blend-mode: difference;
+  opacity: 0;
+  transition: opacity 500ms ease;
+  pointer-events: none;
+}
+.section-index.is-active {
+  opacity: 0.8;
+}
+.section-index.is-hidden {
+  opacity: 0;
+}
+@media (max-width: 48rem) {
+  .section-index {
+    display: none;
+  }
 }
 
 /* Honour reduced-motion: no movement, no smooth scroll, content always shown. */
@@ -244,5 +349,15 @@ html[dir='rtl'] .statement {
   [data-reveal] {
     opacity: 1;
     transform: none;
+    clip-path: none;
+    animation: none !important;
+  }
+  /* Scroll-linked parallax layers hold still. */
+  .section__bg picture,
+  .hero__bg picture,
+  .hero__video,
+  .hero__img {
+    animation: none !important;
+    transform: none !important;
   }
 }

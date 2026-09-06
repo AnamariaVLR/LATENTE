@@ -78,6 +78,7 @@ export interface Dictionary {
   footer: {
     email: string;
     dossier: string;
+    privacy: string;
     rights: string;
     languageLabel: string;
   };
@@ -89,23 +90,56 @@ export interface Dictionary {
     eyebrow: string;
     title: string;
     intro: string;
+    /** Group headings that structure the calm, single-page form. */
+    groups: { you: string; property: string; conversation: string };
     fields: {
       name: string;
       company: string;
       role: string;
       email: string;
+      phone: string;
       country: string;
+      propertyType: string;
+      propertyTypeDefault: string;
+      rooms: string;
       interest: string;
       interestDefault: string;
+      currentProgram: string;
+      timeline: string;
+      timelineDefault: string;
       message: string;
     };
     interestOptions: {
       house: string;
       bespoke: string;
       partnership: string;
+      dossier: string;
     };
+    propertyTypes: {
+      hotelGroup: string;
+      boutique: string;
+      restaurant: string;
+      club: string;
+      other: string;
+    };
+    timelines: { exploring: string; months: string; now: string };
+    /** GDPR-style consent line; `privacyLink` is the anchor text inside it. */
+    consent: { before: string; privacyLink: string; after: string };
     optionalLabel: string;
     submit: string;
+    sending: string;
+    error: string;
     success: { title: string; body: string; back: string };
+  };
+
+  privacy: {
+    metaTitle: string;
+    metaDescription: string;
+    eyebrow: string;
+    title: string;
+    updated: string;
+    /** Clearly a template — must be reviewed by counsel before launch. */
+    notice: string;
+    sections: { title: string; body: string }[];
   };
 }

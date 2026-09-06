@@ -73,6 +73,14 @@
   --hairline: color-mix(in srgb, var(--gold) 70%, transparent);
   --scrim-strong: 0.62; /* overlay opacity where text sits over imagery */
   --scrim-soft: 0.40;
+
+  /* --- Photography grade ---------------------------------------------------
+     A single "film stock" applied to every photo so the set reads as one
+     art-directed sequence: gentle desaturation + a forest-hued colour cast. */
+  --grade-saturate: 0.82;
+  --grade-contrast: 1.03;
+  --grade-tint: var(--forest);
+  --grade-tint-opacity: 0.22;
 }
 
 /* On small phones the wide wordmark tracking (0.42em) makes "LATENTE" wider than

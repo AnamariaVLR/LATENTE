@@ -1,8 +1,16 @@
 ---
 // Hero: full-bleed misty wax-palm landscape, centred wordmark, the program line,
-// and a single quiet "Inquire" link. Slow fade-in on load (reduced-motion safe).
+// and a single quiet "Inquire" link. Slow staged fade-in on load.
+//
+// Cinemagraph support: drop `hero-cocora-valley.mp4` (and/or `.webm`) into
+// /public/images and the hero becomes a silent, looping video — detected at
+// build time, with the responsive still as poster/fallback. Under
+// prefers-reduced-motion the video is hidden and the still is shown instead.
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
 import Logo from './Logo.astro';
 import { getDictionary, localizePath, type Locale } from '../i18n';
+import { responsiveSources } from '../lib/images';
 
 interface Props {
   locale: Locale;
@@ -11,20 +19,52 @@ interface Props {
 const { locale } = Astro.props;
 const t = getDictionary(locale);
 const inquireHref = localizePath(locale, 'inquire');
+
+const still = responsiveSources('/images/hero-cocora-valley.jpg');
+const pub = join(process.cwd(), 'public', 'images');
+const videoMp4 = existsSync(join(pub, 'hero-cocora-valley.mp4'));
+const videoWebm = existsSync(join(pub, 'hero-cocora-valley.webm'));
+const hasVideo = videoMp4 || videoWebm;
 ---
 
-<section class="hero grain" aria-label={t.hero.eyebrow}>
+<section class:list={['hero', 'grain', { 'has-video': hasVideo }]} aria-label={t.hero.eyebrow}>
   <div class="hero__bg" aria-hidden="true">
     <picture>
-      <source srcset="/images/hero-cocora-valley.webp" type="image/webp" />
+      {
+        still.responsive ? (
+          <>
+            <source type="image/avif" srcset={still.avif} sizes="100vw" />
+            <source type="image/webp" srcset={still.webp} sizes="100vw" />
+          </>
+        ) : (
+          <source type="image/webp" srcset={still.webpSingle} />
+        )
+      }
       <img
-        src="/images/hero-cocora-valley.jpg"
+        src={still.fallback}
         alt={t.meta.ogAlt}
         fetchpriority="high"
         decoding="async"
         class="hero__img"
       />
     </picture>
+    {
+      hasVideo && (
+        <video
+          class="hero__video"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          poster={still.fallback}
+        >
+          {videoWebm && <source src="/images/hero-cocora-valley.webm" type="video/webm" />}
+          {videoMp4 && <source src="/images/hero-cocora-valley.mp4" type="video/mp4" />}
+        </video>
+      )
+    }
+    <div class="hero__grade"></div>
     <div class="hero__scrim"></div>
   </div>
 
@@ -57,12 +97,32 @@ const inquireHref = localizePath(locale, 'inquire');
     width: 100%;
     height: 100%;
   }
-  .hero__img {
+  .hero__img,
+  .hero__video {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* A very slow, almost-imperceptible drift adds life without distraction. */
+    filter: saturate(var(--grade-saturate)) contrast(var(--grade-contrast));
+  }
+  .hero__img {
+    /* A very slow, almost-imperceptible drift adds life to the still. */
     animation: hero-drift 26s ease-in-out infinite alternate;
+  }
+  .hero__video {
+    position: absolute;
+    inset: 0;
+  }
+  /* When a video plays, the still underneath is just a poster: no drift. */
+  .has-video .hero__img {
+    animation: none;
+  }
+  /* Unified colour cast shared with every photo section. */
+  .hero__grade {
+    position: absolute;
+    inset: 0;
+    background: var(--grade-tint);
+    mix-blend-mode: color;
+    opacity: var(--grade-tint-opacity);
   }
   .hero__scrim {
     position: absolute;
@@ -107,6 +167,9 @@ const inquireHref = localizePath(locale, 'inquire');
   .hero__tagline { animation-delay: 1000ms; }
   .hero__inquire { animation-delay: 1300ms; }
 
+  .hero__eyebrow {
+    color: var(--on-dark);
+  }
   .hero__rule {
     margin-block: var(--space-2xs);
   }
@@ -122,6 +185,16 @@ const inquireHref = localizePath(locale, 'inquire');
     margin-block-start: var(--space-sm);
   }
 
+  /* Scroll-linked depth: the hero image sinks slowly as the page scrolls away. */
+  @supports (animation-timeline: view()) {
+    .hero__bg picture,
+    .hero__video {
+      animation: hero-parallax linear both;
+      animation-timeline: view();
+      animation-range: exit 0% exit 100%;
+    }
+  }
+
   @keyframes hero-in {
     to {
       opacity: 1;
@@ -132,10 +205,19 @@ const inquireHref = localizePath(locale, 'inquire');
     from { transform: scale(1.06) translate3d(0, 0, 0); }
     to { transform: scale(1.12) translate3d(0, -1.5%, 0); }
   }
+  @keyframes hero-parallax {
+    from { transform: translateY(0); }
+    to { transform: translateY(18%); }
+  }
 
   @media (prefers-reduced-motion: reduce) {
-    .hero__img {
+    .hero__img,
+    .hero__bg picture,
+    .hero__video {
       animation: none;
+    }
+    .hero__video {
+      display: none;
     }
     .hero__eyebrow,
     .hero__wordmark,

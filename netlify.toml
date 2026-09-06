@@ -1,11 +1,14 @@
 # Netlify configuration for LATENTE — static Astro deploy.
 
 [build]
-  command = "npm run build"
+  # Derived assets (responsive AVIF/WebP, subset variable fonts) are regenerated
+  # if missing before the Astro build — both scripts are idempotent and free.
+  command = "npm run assets && npm run build"
   publish = "dist"
 
 [build.environment]
   NODE_VERSION = "22"
+  PYTHON_VERSION = "3.11"
 
 # Cache the self-hosted fonts aggressively — they are fingerprinted by name and
 # never change once a real brand font is in place.
@@ -19,6 +22,15 @@
   for = "/images/*"
   [headers.values]
     Cache-Control = "public, max-age=2592000"
+
+# Sensible security headers for a static site (free, no configuration needed).
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
 
 # Send visitors landing on the bare domain to the English homepage.
 # (A future enhancement could do Accept-Language negotiation via an edge function.)
