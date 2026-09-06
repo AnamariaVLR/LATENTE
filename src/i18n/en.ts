@@ -1,4 +1,5 @@
 import type { Dictionary } from './types';
+import { INQUIRY_EMAIL } from '../config';
 
 // English — the canonical, fully-written copy. All other locales mirror this shape.
 const en: Dictionary = {
@@ -113,7 +114,7 @@ const en: Dictionary = {
   },
 
   footer: {
-    email: 'hello@latente.coffee',
+    email: INQUIRY_EMAIL,
     dossier: 'Request the full dossier',
     privacy: 'Privacy',
     rights: 'LATENTE. All rights reserved.',

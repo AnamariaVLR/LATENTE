@@ -114,6 +114,27 @@ The site ships with **no** tracking by default.
 
 ---
 
+## Public preview on GitHub Pages (free, already live)
+
+`.github/workflows/pages.yml` builds and publishes the site to **GitHub Pages**
+on every push — no extra account needed. The preview lives under the repository
+sub-path, so the build runs with `BASE_PATH=/LATENTE` and every internal link and
+asset is base-aware via `src/config.ts` (`withBase()`).
+
+**Preview URL:** `https://anamariavlr.github.io/LATENTE/`
+
+Netlify Forms only exist on Netlify, so the preview uses **formsubmit.co** —
+free, no account, works from any static host. To receive inquiries from the
+preview, add a repository variable **`INQUIRY_EMAIL`** (Settings → Secrets and
+variables → Actions → Variables) with the corporate inbox; the first submission
+emails that address a one-time activation link. Production on Netlify keeps
+using Netlify Forms (`PUBLIC_FORM_PROVIDER` defaults to `netlify`).
+
+Environment knobs (all optional): `SITE_URL`, `BASE_PATH`,
+`PUBLIC_FORM_PROVIDER` (`netlify` | `formsubmit`), `PUBLIC_INQUIRY_EMAIL`.
+
+---
+
 ## Design system & customisation
 
 Everything visual is centralised — swapping these re-skins the whole site.

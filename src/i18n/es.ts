@@ -1,4 +1,5 @@
 import type { Dictionary } from './types';
+import { INQUIRY_EMAIL } from '../config';
 
 // -----------------------------------------------------------------------------
 // Español — DRAFT translation.
@@ -117,7 +118,7 @@ const es: Dictionary = {
   },
 
   footer: {
-    email: 'hello@latente.coffee',
+    email: INQUIRY_EMAIL,
     dossier: 'Solicitar el dossier completo',
     privacy: 'Privacidad',
     rights: 'LATENTE. Todos los derechos reservados.',

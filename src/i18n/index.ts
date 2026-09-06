@@ -1,4 +1,5 @@
 import type { Dictionary } from './types';
+import { withBase } from '../config';
 import en from './en';
 import es from './es';
 import ar from './ar';
@@ -20,12 +21,12 @@ export function getDictionary(locale: string | undefined): Dictionary {
 }
 
 /**
- * Build a locale-prefixed path. e.g. localizePath('ar', '/inquire') -> '/ar/inquire'.
- * Always returns a trailing-slash-free, leading-slash path segment join.
+ * Build a base-aware, locale-prefixed path.
+ * localizePath('ar', '/inquire') → '/ar/inquire' (or '/LATENTE/ar/inquire' on Pages).
  */
 export function localizePath(locale: Locale, path = ''): string {
   const clean = path.replace(/^\/+|\/+$/g, '');
-  return clean ? `/${locale}/${clean}` : `/${locale}`;
+  return withBase(clean ? `/${locale}/${clean}` : `/${locale}`);
 }
 
 /** The set of alternate-language links for a given page, used for hreflang. */

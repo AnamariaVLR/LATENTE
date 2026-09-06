@@ -4,6 +4,7 @@ import SEO from '../components/SEO.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { getDictionary, type Locale } from '../i18n';
+import { withBase } from '../config';
 
 import '../styles/tokens.css';
 import '../styles/fonts.css';
@@ -42,22 +43,22 @@ const isArabic = locale === 'ar';
     <meta name="generator" content={Astro.generator} />
 
     {/* Favicon set generated from the palm-tree mark (placeholder). */}
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
+    <link rel="icon" href={withBase('/favicon-32.png')} sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />
+    <link rel="manifest" href={withBase('/site.webmanifest')} />
 
     {/* Preload the two variable fonts (they paint first) to avoid layout shift. */}
     <link
       rel="preload"
-      href="/fonts/cormorant-garamond-var-latin.woff2"
+      href={withBase('/fonts/cormorant-garamond-var-latin.woff2')}
       as="font"
       type="font/woff2"
       crossorigin
     />
     <link
       rel="preload"
-      href="/fonts/eb-garamond-var-latin.woff2"
+      href={withBase('/fonts/eb-garamond-var-latin.woff2')}
       as="font"
       type="font/woff2"
       crossorigin
@@ -66,7 +67,7 @@ const isArabic = locale === 'ar';
       isArabic && (
         <link
           rel="preload"
-          href="/fonts/amiri-400-arabic.woff2"
+          href={withBase('/fonts/amiri-400-arabic.woff2')}
           as="font"
           type="font/woff2"
           crossorigin

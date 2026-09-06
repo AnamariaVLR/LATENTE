@@ -11,6 +11,7 @@ import { join } from 'node:path';
 import Logo from './Logo.astro';
 import { getDictionary, localizePath, type Locale } from '../i18n';
 import { responsiveSources } from '../lib/images';
+import { withBase } from '../config';
 
 interface Props {
   locale: Locale;
@@ -59,8 +60,8 @@ const hasVideo = videoMp4 || videoWebm;
           preload="metadata"
           poster={still.fallback}
         >
-          {videoWebm && <source src="/images/hero-cocora-valley.webm" type="video/webm" />}
-          {videoMp4 && <source src="/images/hero-cocora-valley.mp4" type="video/mp4" />}
+          {videoWebm && <source src={withBase('/images/hero-cocora-valley.webm')} type="video/webm" />}
+          {videoMp4 && <source src={withBase('/images/hero-cocora-valley.mp4')} type="video/mp4" />}
         </video>
       )
     }

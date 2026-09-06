@@ -17,7 +17,12 @@
 // without JS it posts natively and Netlify shows its own success page.
 // `?interest=dossier` (or any option value) pre-selects the area of interest.
 // Submissions are emailed to INQUIRY_EMAIL — see README to connect it.
+//
+// Two free backends, chosen at build time by PUBLIC_FORM_PROVIDER (src/config.ts):
+//   netlify    — Netlify Forms, zero config on Netlify (production)
+//   formsubmit — formsubmit.co, works from any static host (GitHub Pages preview)
 import { getDictionary, localizePath, type Locale } from '../i18n';
+import { FORM_PROVIDER, INQUIRY_EMAIL } from '../config';
 
 interface Props {
   locale: Locale;
@@ -33,20 +38,36 @@ const privacyHref = localizePath(locale, 'privacy');
 
 // One shared submission set across locales keeps the dashboard tidy.
 const FORM_NAME = 'inquiry';
+const netlify = FORM_PROVIDER === 'netlify';
+// Where the JS-enhanced submit posts; the no-JS fallback uses the form action.
+const endpoint = netlify ? '/' : `https://formsubmit.co/ajax/${INQUIRY_EMAIL}`;
+const honeypot = netlify ? 'bot-field' : '_honey';
 ---
 
 <div class="inquiry">
   <form
     name={FORM_NAME}
     method="POST"
-    data-netlify="true"
-    data-netlify-honeypot="bot-field"
+    action={netlify ? undefined : `https://formsubmit.co/${INQUIRY_EMAIL}`}
+    data-netlify={netlify ? 'true' : undefined}
+    data-netlify-honeypot={netlify ? honeypot : undefined}
+    data-provider={FORM_PROVIDER}
+    data-endpoint={endpoint}
     class="form"
     id="inquiry-form"
     novalidate={false}
   >
-    {/* Required by Netlify to associate this submission with the named form. */}
-    <input type="hidden" name="form-name" value={FORM_NAME} />
+    {
+      netlify ? (
+        <input type="hidden" name="form-name" value={FORM_NAME} />
+      ) : (
+        <>
+          <input type="hidden" name="_subject" value="LATENTE — new inquiry" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_captcha" value="false" />
+        </>
+      )
+    }
     {/* Record which locale the inquiry came from. */}
     <input type="hidden" name="locale" value={locale} />
 
@@ -54,7 +75,7 @@ const FORM_NAME = 'inquiry';
     <p class="hp" aria-hidden="true">
       <label>
         Don’t fill this out if you’re human:
-        <input name="bot-field" tabindex="-1" autocomplete="off" />
+        <input name={honeypot} tabindex="-1" autocomplete="off" />
       </label>
     </p>
 
@@ -212,11 +233,20 @@ const FORM_NAME = 'inquiry';
       }
 
       try {
-        const res = await fetch('/', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: new URLSearchParams(new FormData(form) as any).toString(),
-        });
+        const data = new FormData(form);
+        const endpoint = form.dataset.endpoint || '/';
+        const res =
+          form.dataset.provider === 'formsubmit'
+            ? await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+                body: JSON.stringify(Object.fromEntries(data as any)),
+              })
+            : await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams(data as any).toString(),
+              });
         if (!res.ok) throw new Error(String(res.status));
 
         // Analytics hook: any provider can listen for this (see README).

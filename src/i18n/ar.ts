@@ -1,4 +1,5 @@
 import type { Dictionary } from './types';
+import { INQUIRY_EMAIL } from '../config';
 
 // =============================================================================
 // العربية — PLACEHOLDER COPY. DO NOT SHIP AS-IS.
@@ -123,7 +124,7 @@ const ar: Dictionary = {
   },
 
   footer: {
-    email: 'hello@latente.coffee',
+    email: INQUIRY_EMAIL,
     dossier: 'اطلب الملف الكامل',
     privacy: 'الخصوصية',
     rights: 'LATENTE. جميع الحقوق محفوظة.',
